@@ -26,12 +26,12 @@ global.plugins = {};
 
 gachaService.load();
 
-const botOwner = '5217971282613@s.whatsapp.net';
+const botOwner = '573115434166@s.whatsapp.net';
 global.botOwner = botOwner;
 
 const bot = new Bot(uuid, auth, account, logger);
 
-global.commandMap = new Map(); // Mapa comando -> plugin
+global.commandMap = new Map(); 
 
 const loadPlugins = async () => {
     const pluginsPath = path.join(__dirname, 'plugins');

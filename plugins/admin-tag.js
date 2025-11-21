@@ -1,4 +1,3 @@
-
 import { isAdmin } from '../lib/utils.js';
 
 export default {

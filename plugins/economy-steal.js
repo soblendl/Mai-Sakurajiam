@@ -34,10 +34,7 @@ export default {
             ctx.dbService.markDirty();
 
             await ctx.reply(
-                `ꕥ *Robo Exitoso*\n\n` +
-                `Robaste ${formatNumber(stolen)} coins a @${target.split('@')[0]}\n` +
-                `Tu balance: ${formatNumber(userData.coins)} coins`,
-                { mentions: [target] }
+                `ꕥ Robaste ${formatNumber(stolen)} coins a @${target.split('@')[0]}` 
             );
         } else {
             const fine = Math.floor(Math.random() * 200) + 50;

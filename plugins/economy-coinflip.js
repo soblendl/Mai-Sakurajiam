@@ -5,7 +5,7 @@ export default {
 
     async execute(ctx) {
         if (ctx.args.length < 2) {
-            return await ctx.reply('ꕤ Uso: #coinflip <cantidad> <cara/cruz>');
+            return await ctx.reply('ꕤ Uso: */coinflip* `<cantidad>` `<cara/cruz>`');
         }
 
         const amount = parseInt(ctx.args[0]);
@@ -30,11 +30,11 @@ export default {
         if (won) {
             userData.coins += amount;
             ctx.dbService.markDirty();
-            await ctx.reply(`ꕥ ¡Salió ${result}! Ganaste ${amount} coins.`);
+            await ctx.reply(`ꕥ ¡Salió *${result}*! Ganaste *${amount}* coins.`);
         } else {
             userData.coins -= amount;
             ctx.dbService.markDirty();
-            await ctx.reply(`ꕤ Salió ${result}. Perdiste ${amount} coins.`);
+            await ctx.reply(`ꕤ Salió *${result}*. Perdiste *${amount}* coins.`);
         }
     }
 };

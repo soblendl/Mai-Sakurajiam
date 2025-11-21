@@ -1,4 +1,4 @@
-const OWNERS = ['5215512345678'];
+const OWNERS = ['5731154341766', '526631079388', '595983799436'];
 
 export default {
     commands: ['staff'],

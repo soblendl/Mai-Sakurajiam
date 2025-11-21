@@ -14,7 +14,7 @@ export default {
         }
 
         if (!ctx.args[0] || !['on', 'off'].includes(ctx.args[0].toLowerCase())) {
-            return await ctx.reply('ꕤ Uso: #alertas <on/off>');
+            return await ctx.reply('ꕤ Uso: */alertas* `<on/off>`');
         }
 
         const enable = ctx.args[0].toLowerCase() === 'on';

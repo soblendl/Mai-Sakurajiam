@@ -31,9 +31,9 @@ export default {
 
         await ctx.reply(
             `ꕥ *Retiro Exitoso*\n\n` +
-            `Retiraste: ${formatNumber(amount)} coins\n` +
-            `ꕤ Coins: ${formatNumber(userData.coins)}\n` +
-            `ꕥ Banco: ${formatNumber(userData.bank)}`
+            `Retiraste: *${formatNumber(amount)}* coins\n` +
+            `ꕤ Coins: *${formatNumber(userData.coins)}*\n` +
+            `ꕥ Banco: *${formatNumber(userData.bank)}*`
         );
     }
 };

@@ -6,11 +6,11 @@ export default {
     async execute(ctx) {
         const userData = ctx.dbService.getUser(ctx.sender);
         const now = Date.now();
-        const cooldown = 86400000; // 24 horas
+        const cooldown = 86400000; 
 
         if (now - (userData.lastDaily || 0) < cooldown) {
             const timeLeft = Math.round((cooldown - (now - userData.lastDaily)) / 3600000);
-            return await ctx.reply(`ꕤ Ya reclamaste tu recompensa diaria. Vuelve en ${timeLeft} horas.`);
+            return await ctx.reply(`ꕤ Ya reclamaste tu recompensa diaria. Vuelve en *${timeLeft}* horas.`);
         }
 
         const reward = 1000;

@@ -29,6 +29,6 @@ export default {
         userData.bank = (userData.bank || 0) + amount;
         ctx.dbService.markDirty();
 
-        await ctx.reply(`ꕥ Depositaste ${amount} coins en el banco.`);
+        await ctx.reply(`ꕥ Depositaste *${amount}* coins en el banco.`);
     }
 };

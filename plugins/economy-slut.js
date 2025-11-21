@@ -1,12 +1,13 @@
 import { formatNumber, getCooldown, formatTime, getRandom } from '../lib/utils.js';
 
 const ACTIVITIES = [
-    '💃 bailaste en el club',
-    '🎭 actuaste en un show',
-    '📸 posaste para fotos',
-    '🎤 cantaste en un bar',
-    '👗 modelaste ropa',
-    '🍷 acompañaste a alguien a cenar'
+    'te pusiste en la zona rosa y un chirrete te compro',
+    'fuiste parte de una pelicula',
+    'te robaron fotos y lo subieron',
+    'y señor de 40 te robo y te la metio',
+    'te invitaron en un 2 pa 2',
+    'te emborrachaste y te follaron',
+    'DeltaByte te compro y te llevo a su casa'
 ];
 
 export default {
@@ -34,9 +35,7 @@ export default {
         const activity = getRandom(ACTIVITIES);
 
         await ctx.reply(
-            `ꕥ *Trabajo Dudoso*\n\n` +
-            `${activity} y ganaste: ${formatNumber(REWARD)} coins ꕥ\n` +
-            `Balance actual: ${formatNumber(userData.economy.coins)} coins`
+            `ꕥ ${activity} y ganaste: *${formatNumber(REWARD)}* coins.`
         );
     }
 };
