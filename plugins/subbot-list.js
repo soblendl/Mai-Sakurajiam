@@ -12,11 +12,13 @@ export default {
 
         let message = `ꕤ *Sub-Bots Activos* (${subbots.length})\n\n`;
         subbots.forEach((bot, i) => {
-            message += `${i + 1}. @${bot.userId.split('@')[0]}\n`;
+            // Extract phone number for display (userId is already in format: number@s.whatsapp.net)
+            const phoneNumber = bot.userId.split('@')[0];
+            message += `${i + 1}. @${phoneNumber}\n`;
         });
 
         await ctx.reply(message, {
-            mentions: subbots.map(b => b.userId)
+            mentions: subbots.map(b => b.userId) // userId already has @s.whatsapp.net format
         });
     }
 };

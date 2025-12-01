@@ -1,29 +1,50 @@
-import { downloadMediaMessage } from '@whiskeysockets/baileys';
+import { Sticker, StickerTypes } from 'wa-sticker-formatter';
 
 export default {
     commands: ['sticker', 's'],
-    
+
     async execute(ctx) {
         try {
-            const messageType = Object.keys(ctx.message || {})[0];
-            
-            if (messageType !== 'imageMessage' && messageType !== 'videoMessage') {
-                const quotedMsg = ctx.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-                if (!quotedMsg?.imageMessage && !quotedMsg?.videoMessage) {
-                    return await ctx.reply('ꕤ Debes enviar una imagen o video, o responder a uno.');
-                }
+            const { msg, bot, chatId } = ctx;
+
+            // Extract quoted message manually since ctx.quoted doesn't exist
+            const quotedContent = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+            const quoted = quotedContent ? { message: quotedContent } : null;
+
+            // Check for image/video
+            const isImage = msg.message?.imageMessage || quoted?.message?.imageMessage;
+            const isVideo = msg.message?.videoMessage || quoted?.message?.videoMessage;
+
+            if (!isImage && !isVideo) {
+                return await ctx.reply('ꕤ Debes enviar una imagen o video, o responder a uno.');
             }
 
             await ctx.reply('⏳ Creando sticker...');
 
-            const buffer = await downloadMediaMessage(ctx._raw, 'buffer', {});
-            
-            await ctx.bot.sock.sendMessage(ctx.chatId, {
-                sticker: buffer
+            // Download media using ctx.download()
+            // If quoted, we pass the quoted message structure
+            const buffer = await ctx.download(quoted || msg);
+
+            // Create sticker using wa-sticker-formatter
+            const sticker = new Sticker(buffer, {
+                pack: 'Kaoruko Bot',
+                author: 'DeltaByte',
+                type: StickerTypes.FULL,
+                categories: ['🤩', '🎉'],
+                id: '12345',
+                quality: 50,
+                background: 'transparent'
             });
+
+            const stickerBuffer = await sticker.toBuffer();
+
+            await bot.sock.sendMessage(chatId, {
+                sticker: stickerBuffer
+            }, { quoted: msg });
+
         } catch (error) {
             console.error('Error creando sticker:', error);
-            await ctx.reply('ꕤ Error al crear el sticker.');
+            await ctx.reply(`ꕤ Error al crear el sticker: ${error.message}`);
         }
     }
 };
