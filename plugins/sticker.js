@@ -1,4 +1,5 @@
 import { Sticker, StickerTypes } from 'wa-sticker-formatter';
+import { downloadMediaMessage } from 'baileys';
 
 export default {
     commands: ['sticker', 's'],
@@ -21,9 +22,17 @@ export default {
 
             await ctx.reply('⏳ Creando sticker...');
 
-            // Download media using ctx.download()
-            // If quoted, we pass the quoted message structure
-            const buffer = await ctx.download(quoted || msg);
+            // Download media using 'baileys' directly
+            const messageToDownload = quoted || msg;
+            const buffer = await downloadMediaMessage(
+                messageToDownload,
+                'buffer',
+                {},
+                {
+                    logger: console,
+                    reuploadRequest: bot.sock.updateMediaMessage
+                }
+            );
 
             // Create sticker using wa-sticker-formatter
             const sticker = new Sticker(buffer, {

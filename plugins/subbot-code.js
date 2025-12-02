@@ -22,7 +22,16 @@ export default {
             }
 
             await ctx.reply('⏳ Iniciando vinculación con código de 8 dígitos...');
-            jadibotManager.startSubbot(null, chatId, ctx.bot.sock, phoneNumber);
+
+            try {
+                const result = await jadibotManager.startSubbot(null, chatId, ctx.bot.sock, phoneNumber);
+                if (!result.success) {
+                    await ctx.reply(result.message || 'ꕤ Error al iniciar subbot');
+                }
+            } catch (error) {
+                console.error('[Code] Error:', error);
+                await ctx.reply('ꕤ Error al generar el código. Inténtalo de nuevo.');
+            }
             return;
         }
 
@@ -34,7 +43,16 @@ export default {
             }
 
             await ctx.reply('⏳ Iniciando vinculación con código para el número especificado...');
-            jadibotManager.startSubbot(null, chatId, ctx.bot.sock, phoneNumber);
+
+            try {
+                const result = await jadibotManager.startSubbot(null, chatId, ctx.bot.sock, phoneNumber);
+                if (!result.success) {
+                    await ctx.reply(result.message || 'ꕤ Error al iniciar subbot');
+                }
+            } catch (error) {
+                console.error('[Code] Error:', error);
+                await ctx.reply('ꕤ Error al generar el código. Inténtalo de nuevo.');
+            }
             return;
         }
 

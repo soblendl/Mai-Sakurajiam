@@ -88,6 +88,8 @@ export default {
 > ➥ Ver todos los personajes de un anime específico.
 ✿ *#wtop*
 > ➥ Mira el top de waifus más populares.
+✿ *#trade* » *#intercambio* + [ tu_personaje ] + [ su_personaje ] + [ @user ]
+> ➥ Intercambia personajes con otro usuario.
 
  ୨୧ — Descargas
 ╰↷ Comandos para descargar algun contenido de una plataforma.
@@ -120,10 +122,14 @@ export default {
 > ➥ Busca y descarga música de Spotify.
 ✿ *#soundcloud* + [ texto ]
 > ➥ Busca y descarga música de SoundCloud.
-✿ *#tiktoksearch* + [ texto ]
-> ➥ Busca videos en TikTok.
+✿ *#tiktoksearch* » *#ttss* + [ texto ]
+> ➥ Busca videos en TikTok (carousel).
 ✿ *#wikipedia* » *#wiki* + [ texto ]
 > ➥ Busca información en Wikipedia.
+✿ *#lyrics* » *#letra* + [ texto ]
+> ➥ Busca letras de canciones.
+✿ *#apk* » *#modapk* + [ texto ]
+> ➥ Busca y descarga aplicaciones APK.
 
  ୨୧ — Utilidades
 ╰↷ Comandos utiles 
@@ -134,6 +140,10 @@ export default {
 > ➥ Consulta con Gemini.
 ✿ *#gemini* + [ texto ]
 > ➥ Consulta con Gemini AI.
+✿ *#copilot* + [ texto ]
+> ➥ Habla con Microsoft Copilot AI.
+✿ *#claude* + [ texto ]
+> ➥ Habla con Anthropic Claude AI.
 ✿ *#sticker* » *#s*
 > ➥ Crea un sticker de una imagen o video.
 ✿ *#toimg* » *#img*
@@ -148,6 +158,10 @@ export default {
 > ➥ Crea un poster de "Se Busca".
 ✿ *#speak* + [ texto ]
 > ➥ Convierte texto a voz (Adam).
+✿ *#pfp* » *#perfil* + [ @user ]
+> ➥ Obtiene la foto de perfil de un usuario.
+✿ *#status* » *#estado*
+> ➥ Muestra el estado del bot (uptime, RAM, plataforma).
 
  ୨୧ — Diversión
 ╰↷ Comandos para interactuar.
@@ -206,6 +220,8 @@ export default {
 > ➥ Activa o desactiva el sistema de alertas.
 ✿ *#kickall*
 > ➥ Elimina a todos los no-admins del grupo.
+✿ *#link* » *#enlace*
+> ➥ Obtiene el enlace de invitación del grupo.
 
 ────୨ৎ────`;
 

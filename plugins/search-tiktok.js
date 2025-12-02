@@ -1,70 +1,50 @@
+import axios from 'axios';
 
-import axios from 'axios'
-import * as baileys from '@whiskeysockets/baileys'
-
-const tiktokSearchCommand = {
-    name: 'tiktoksearch',
-    aliases: ['tts', 'tiktoks'],
-    category: 'search',
-    description: 'Busca videos en TikTok',
-    usage: '#tiktoksearch <texto>',
-    adminOnly: false,
-    groupOnly: false,
-    botAdminRequired: false,
+export default {
+    commands: ['tiktoksearch', 'ttss'],
+    tags: ['search'],
+    help: ['tiktoksearch <texto>'],
 
     async execute(ctx) {
-        const { chatId, args } = ctx;
-        const sock = ctx.bot.sock;
-        const dev = 'DeltaByte';
+        const { bot, chatId, args, text, reply } = ctx;
+        const conn = bot?.sock;
 
-        if (args.length === 0) {
-            return await ctx.reply(
-                "《✧》 Por favor, ingrese un texto para buscar en TikTok.\n\n" +
-                "Ejemplo: #tiktoksearch gatos graciosos"
-            );
-        }
-
-        const text = args.join(' ');
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
+        if (!text) {
+            return await reply('ꕤ Por favor escribe qué videos quieres buscar.\nEjemplo: #ttss gatos graciosos');
         }
 
         try {
-            let { data } = await axios.get(
-                `https://apis-starlights-team.koyeb.app/starlight/tiktoksearch?text=${encodeURIComponent(text)}`
-            );
+            const apiUrl = `https://api.stellarwa.xyz/search/tiktok?query=${encodeURIComponent(text)}&key=stellar-20J4F8hk`;
+            const response = await axios.get(apiUrl);
+            const data = response.data;
+            if (!data || !data.status || !data.data || !Array.isArray(data.data) || data.data.length === 0) {
+                return await reply('ꕤ No encontré videos para tu búsqueda.');
+            }
+            // Limit to 5 videos
+            const videos = data.data.slice(0, 5);
 
-            if (!data || !data.data || data.data.length === 0) {
-                return await ctx.reply("《✧》 No se encontraron resultados para: " + text);
+            for (const video of videos) {
+                const caption = `ꕥ *TikTok Video* 🎵✨\n\n` +
+                    `✿ *Título:* ${video.title}\n` +
+                    `✿ *Autor:* ${video.author.nickname} (@${video.author.unique_id})\n` +
+                    `✿ *Duración:* ${video.duration}\n` +
+                    `✿ *Vistas:* ${video.stats.views}\n` +
+                    `✿ *Likes:* ${video.stats.likes}\n` +
+                    `──────────────────\n` +
+                    `> _*Powered By DeltaByte*_`;
+
+                await conn.sendMessage(chatId, {
+                    video: { url: video.dl },
+                    caption: caption
+                });
+
+                // Small delay between messages
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
 
-            let searchResults = data.data;
-            shuffleArray(searchResults);
-            let topResults = searchResults.splice(0, 5); // Limit to 5 for speed
-
-            await ctx.reply(`📱 *Resultados TikTok para:* ${text}`);
-
-            for (let i = 0; i < topResults.length; i++) {
-                const result = topResults[i];
-                try {
-                    await sock.sendMessage(chatId, {
-                        video: { url: result.nowm },
-                        caption: `📹 *Video ${i + 1}/${topResults.length}*\n\n📝 ${result.title}\n\n${dev}`
-                    });
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                } catch (e) {
-                    console.error(`Error enviando video ${i + 1}:`, e.message);
-                }
-            }
         } catch (error) {
-            console.error('Error en tiktoksearch:', error);
-            await ctx.reply(`《✧》 *OCURRIÓ UN ERROR:* ${error.message}`);
+            console.error('[TikTokSearch] Error:', error);
+            await reply('ꕤ Ocurrió un error al buscar videos.');
         }
     }
-}
-
-export default tiktokSearchCommand
+};
