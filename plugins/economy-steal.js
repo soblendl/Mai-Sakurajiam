@@ -1,22 +1,22 @@
-
-import { formatNumber, extractMentions } from '../lib/utils.js';
+﻿
+import { formatNumber, extractMentions, styleText } from '../lib/utils.js';
 
 export default {
     commands: ['steal'],
-    
+
     async execute(ctx) {
         if (ctx.isGroup && !ctx.dbService.getGroup(ctx.chatId).settings.economy) {
-            return await ctx.reply('ꕤ El sistema de economía está desactivado en este grupo.');
+            return await ctx.reply(styleText('ꕤ El sistema de economía está desactivado en este grupo.'));
         }
 
         const mentions = extractMentions(ctx);
         if (mentions.length === 0) {
-            return await ctx.reply('ꕤ Debes mencionar a un usuario.\nUso: #steal @usuario');
+            return await ctx.reply(styleText('ꕤ Debes mencionar a un usuario.\nUso: #steal @usuario'));
         }
 
         const target = mentions[0];
         if (target === ctx.sender) {
-            return await ctx.reply('ꕤ No puedes robarte a ti mismo.');
+            return await ctx.reply(styleText('ꕤ No puedes robarte a ti mismo.'));
         }
 
         const userData = ctx.userData.economy;
@@ -28,24 +28,30 @@ export default {
         if (success) {
             const maxSteal = Math.floor(targetData.coins * 0.3);
             const stolen = Math.floor(Math.random() * maxSteal) + 1;
-            
-            targetData.coins = Math.max(0, targetData.coins - stolen);
-            userData.coins += stolen;
-            ctx.dbService.markDirty();
+
+            ctx.dbService.updateUser(target, {
+                'economy.coins': Math.max(0, targetData.coins - stolen)
+            });
+            ctx.dbService.updateUser(ctx.sender, {
+                'economy.coins': userData.coins + stolen
+            });
+            await ctx.dbService.save();
 
             await ctx.reply(
-                `ꕥ Robaste ${formatNumber(stolen)} coins a @${target.split('@')[0]}` 
+                styleText(`ꕥ Robaste ${formatNumber(stolen)} coins a @${target.split('@')[0]}`)
             );
         } else {
-            const fine = Math.floor(Math.random() * 200) + 50;
-            userData.coins = Math.max(0, userData.coins - fine);
-            ctx.dbService.markDirty();
+            const fine = Math.floor(Math.random() * 1000) + 500;
+            ctx.dbService.updateUser(ctx.sender, {
+                'economy.coins': Math.max(0, userData.coins - fine)
+            });
+            await ctx.dbService.save();
 
             await ctx.reply(
-                `ꕤ *Te atraparon!*\n\n` +
-                `Intentaste robar a @${target.split('@')[0]} pero te atraparon.\n` +
-                `Multa: ${formatNumber(fine)} coins\n` +
-                `Tu balance: ${formatNumber(userData.coins)} coins`,
+                styleText(`ꕤ *Te atraparon!*\n\n` +
+                    `Intentaste robar a @${target.split('@')[0]} pero te atraparon.\n` +
+                    `> ✿ Multa: *¥${formatNumber(fine)}* coins\n` +
+                    `> ✿ Tu balance: *¥${formatNumber(Math.max(0, userData.coins - fine))}* coins`),
                 { mentions: [target] }
             );
         }

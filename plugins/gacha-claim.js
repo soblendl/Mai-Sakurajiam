@@ -1,4 +1,4 @@
-import { getCooldown, formatTime } from '../lib/utils.js';
+﻿import { getCooldown, formatTime, styleText } from '../lib/utils.js';
 
 export default {
     commands: ['claim', 'c'],
@@ -10,20 +10,20 @@ export default {
         const cooldown = getCooldown(userData.gacha.lastClaim, COOLDOWN);
 
         if (cooldown > 0) {
-            return await ctx.reply(
+            return await ctx.reply(styleText(
                 `ꕤ Ya reclamaste un personaje recientemente.\nVuelve en: ${formatTime(cooldown)}`
-            );
+            ));
         }
 
         const rolledId = userData.gacha.rolled;
         if (!rolledId) {
-            return await ctx.reply('ꕤ Primero debes girar la ruleta con #rollwaifu (#rw) para obtener un personaje.');
+            return await ctx.reply(styleText('ꕤ Primero debes girar la ruleta con #rollwaifu (#rw) para obtener un personaje.'));
         }
 
         const character = gachaService.getById(rolledId);
         if (!character) {
             delete userData.gacha.rolled;
-            return await ctx.reply('ꕤ El personaje que giraste ya no está disponible.');
+            return await ctx.reply(styleText('ꕤ El personaje que giraste ya no está disponible.'));
         }
 
         delete userData.gacha.rolled;
@@ -42,23 +42,22 @@ export default {
         });
 
         try {
-            gachaService.claim(character.id, ctx.sender);
+            gachaService.claim(ctx.sender, character.id);
         } catch (error) {
             console.error('Error reclamando personaje en GachaService:', error.message);
         }
 
         ctx.dbService.markDirty();
+        await ctx.dbService.save();
 
-        const message = `ꕥ Has reclamado a *${character.name}* con éxito.`;
+        // Save gacha state explicitly
+        await gachaService.save();
 
-        if (character.img && character.img.length > 0) {
-            try {
-                await ctx.replyWithImage(character.img[0], { caption: message });
-            } catch {
-                await ctx.reply(message);
-            }
-        } else {
-            await ctx.reply(message);
-        }
+        const senderNumber = ctx.sender.split('@')[0];
+
+        await ctx.reply(
+            styleText(`ꕥ *@${senderNumber}* ha reclamado a *${character.name}* de *${character.source || 'Desconocido'}*`),
+            { mentions: [ctx.sender] }
+        );
     }
 };

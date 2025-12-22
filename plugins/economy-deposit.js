@@ -1,11 +1,11 @@
-import { formatNumber } from '../lib/utils.js';
+﻿import { formatNumber, styleText } from '../lib/utils.js';
 
 export default {
     commands: ['deposit', 'dep', 'depositar', 'd'],
 
     async execute(ctx) {
         if (ctx.args.length === 0) {
-            return await ctx.reply('ꕤ Uso: #deposit <cantidad|all>');
+            return await ctx.reply(styleText('ꕤ Uso: #deposit <cantidad|all>'));
         }
 
         const userData = ctx.dbService.getUser(ctx.sender);
@@ -19,18 +19,19 @@ export default {
         }
 
         if (isNaN(amount) || amount <= 0) {
-            return await ctx.reply('ꕤ La cantidad debe ser un número mayor a 0.');
+            return await ctx.reply(styleText('ꕤ La cantidad debe ser un número mayor a 0.'));
         }
 
         if ((economy.coins || 0) < amount) {
-            return await ctx.reply('ꕤ No tienes suficientes coins en tu billetera.');
+            return await ctx.reply(styleText('ꕤ No tienes suficientes coins en tu billetera.'));
         }
 
         ctx.dbService.updateUser(ctx.sender, {
             'economy.coins': (economy.coins || 0) - amount,
             'economy.bank': (economy.bank || 0) + amount
         });
+        await ctx.dbService.save();
 
-        await ctx.reply(`ꕥ Depositaste *${amount}* coins en el banco.`);
+        await ctx.reply(styleText(`ꕥ Depositaste *¥${formatNumber(amount)}* coins en el banco.`));
     }
 };

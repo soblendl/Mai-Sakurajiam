@@ -1,253 +1,300 @@
-export default {
+﻿export default {
     commands: ['help', 'menu'],
 
     async execute(ctx) {
         const senderNumber = ctx.sender.split('@')[0];
         const username = ctx.from?.name || senderNumber;
 
-        const helpText = `Hola ${username}, soy *Kaoruko Waguri*, esta es la lista de comandos:
+        const helpText = `*⊱⋅ ────── ⊹ ────── ⋅⊰*
+ ๑ " Hola *${username}* soy *Mai Sakurajima*, espero que tengas un lindo dia "
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
+ ⚐ *D𝖾𝗅𝗍𝖺𝖡𝗒𝗍𝖾*
+ 「🌴」  *Canal* ꢁ *https://whatsapp.com/channel/0029VbB9SA10rGiQvM2DMi2p*
+ 「☕」  *V𝖾𝗋𝗌𝗂ó𝗇* ꢁ *v2.7*
+ 「👤」  *U𝗌𝗎𝖺𝗋𝗂𝗈* ꢁ *${username}*
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
-╭━━━ Powered By DeltaByte ━━━╮
-│
-│ 𖣂 Powered by: DeltaByte
-│ 𖣂 Version: v1.0
-│ 𖣂 Canal oficial: https://whatsapp.com/channel/0029VbB9SA10rGiQvM2DMi2p
-│
-╰━━━━━━━━━━━━━━━━━━━━━━╯
+ ⊹ *Economía*
+ ִ ࣪ ˖ ࣪ \`G𝖺𝗇𝖺 𝗆𝗈𝗇𝖾𝖽𝖺𝗌, 𝖺𝗉𝗎𝖾𝗌𝗍𝖺 𝗒 𝗃𝗎é𝗀𝖺𝗍𝖾𝗅𝖺\`
+⟡ *::* *#economy* \`<on/off>\`
+> » Desactiva o activa el sistema de economía.
+⟡ *::* *#balance* • *#bal*
+> » Ver tus coins.
+⟡ *::* *#coinflip* • *#cf* \`<cantidad>\` \`<cara/cruz>\`
+> » Apuesta cara o cruz.
+⟡ *::* *#crime*
+> » Haz un robo y gana dinero.
+⟡ *::* *#daily*
+> » Reclama tu recompensa diaria.
+⟡ *::* *#deposit* • *#d* \`<cantidad>\`
+> » Guarda tus coins.
+⟡ *::* *#economyboard* • *#baltop*
+> » Mira el top de usuarios con más monedas.
+⟡ *::* *#givecoins* • *#pay* \`<@user>\`
+> » Regala coins a un usuario.
+⟡ *::* *#roulette* • *#rt* \`<red/black>\` \`<cantidad>\`
+> » Gira la ruleta y gana coins.
+⟡ *::* *#slut*
+> » Trabaja dudosamente para ganar coins.
+⟡ *::* *#steal* \`<@user>\`
+> » Roba coins a un usuario.
+⟡ *::* *#slot* \`<cantidad>\`
+> » Apuesta en la tragaperras (x5 Jackpot).
+⟡ *::* *#withdraw* • *#wd* \`<cantidad|all>\`
+> » Retira una cantidad de coins.
+⟡ *::* *#work* • *#w*
+> » Trabaja y gana coins.
+⟡ *::* *#beg* • *#pedir*
+> » Pide dinero en la calle.
+⟡ *::* *#fish* • *#pescar*
+> » Pesca y gana coins (sistema de rarezas).
+⟡ *::* *#einfo* \`<@user>\`
+> » Mira las estadísticas de economía de alguien.
+⟡ *::* *#season*
+> » Mira la temporada actual del pase de batalla.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
- ୨୧ — Economía
-╰↷ Gana monedas, apuesta y juégatela, el que no arriesga no gana ₍｡≧ ⁠ᵕ ≦｡₎♡
+ ⊹ *Gacha*
+ ִ ࣪ ˖ ࣪ \`C𝗈𝗅𝖾𝖼𝖼𝗂𝗈𝗇𝖺 𝗐𝖺𝗂𝖿𝗎𝗌 𝖾 𝗂𝗇𝗍𝖾𝗋𝖼𝖺𝗆𝖻𝗂𝖺𝗅𝗈𝗌\`
+⟡ *::* *#claim* • *#c*
+> » Reclama una waifu aleatoria.
+⟡ *::* *#harem* • *#miswaifu*
+> » Mira las waifus que tienes.
+⟡ *::* *#rollwaifu* • *#rw*
+> » Mira una waifu aleatoria.
+⟡ *::* *#give* • *#regalar* \`<id>\` \`<@user>\`
+> » Regala una waifu a alguien.
+⟡ *::* *#sell* • *#vender* \`<id>\`
+> » Vende un personaje.
+⟡ *::* *#antirobo* • *#proteger* \`<hora/dia/semana/mes>\`
+> » Protege tus waifus de robos.
+⟡ *::* *#dar* \`<@user>\` \`<id>\`
+> » Da un personaje a otro usuario.
+⟡ *::* *#desbloquear* • *#unlock* \`<@user>\`
+> » Desbloquea la base de un usuario.
+⟡ *::* *#listawaifus* • *#listwaifus* \`<página>\`
+> » Muestra la lista completa de personajes.
+⟡ *::* *#robarwaifu* • *#robar* \`<id>\`
+> » Roba un personaje de otro usuario.
+⟡ *::* *#resetwaifus*
+> » Reinicia todas las waifus (solo owner).
+⟡ *::* *#delwaifu* \`<id>\`
+> » Elimina una waifu de tu colección.
+⟡ *::* *#vote*
+> » Vota por tu waifu favorita.
+⟡ *::* *#wimage* \`<nombre>\`
+> » Busca una imagen de un personaje.
+⟡ *::* *#winfo* \`<nombre>\`
+> » Mira la información de un personaje.
+⟡ *::* *#wvideo* \`<nombre>\`
+> » Mira un video de un personaje.
+⟡ *::* *#ainfo* \`<anime>\`
+> » Ver todos los personajes de un anime específico.
+⟡ *::* *#wtop*
+> » Mira el top de waifus más populares.
+⟡ *::* *#trade* • *#intercambio* \`<tu_personaje>\` \`<su_personaje>\` \`<@user>\`
+> » Intercambia personajes con otro usuario.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
-✿ *#economy* + [ on/off ]
-> ➥ Desactiva o activa el sistema de economia.
-✿ *#balance* » *#bal*
-> ➥ ver tus coins
-✿ *#coinflip* » *#cf* + [ cantidad ] + [ cara/cruz ]
-> ➥ apuesta cara o cruz
-✿ *#crime* 
-> ➥ haz un robo y gana dinero
-✿ *#daily* 
-> ➥ Reclama tu recompensa diaria
-✿ *#deposit* » *#d* + [ cantidad ]
-> ➥ Guarda tus coins
-✿ *#economyboard* » *#baltop*
-> ➥ Mira el top de usuarios con mas monedas.
-✿ *#givecoins* » *#pay* + [ @user ]
-> ➥ Regala coins a un usuario.
-✿ *#roulette* » *#rt* + [ red/black ] + [ cantidad ]
-> ➥ Gira la ruleta y gana coins 
-✿ *#slut* 
-> ➥ ponte en la esquina y preparate para ganar coins a traves de un trabajo dudoso.
-✿ *#steal* + [ @user ]
-> ➥ Roba coins a un usuario.
-✿ *#withdraw* » #wd + [ cantidad ] (all)
-> ➥ Retira una cierta cantidad de coins, o todo.
-✿ *#work* » *#w*
-> ➥ Trabaja y gana coins.
-✿ *#einfo* + [ @user ]
-> ➥ Mira la estadisticas de economia de alguien.
-✿ *#season*
-> ➥ Mira la temporada actual del pase de batalla.
+ ⊹ *Descargas*
+ ִ ࣪ ˖ ࣪ \`D𝖾𝗌𝖼𝖺𝗋𝗀𝖺 𝖼𝗈𝗇𝗍𝖾𝗇𝗂𝖽𝗈 𝖽𝖾 𝗉𝗅𝖺𝗍𝖺𝖿𝗈𝗋𝗆𝖺𝗌\`
+⟡ *::* *#ig* \`<link>\`
+> » Descarga un video de Instagram.
+⟡ *::* *#tiktok* \`<link>\`
+> » Descarga un video de TikTok.
+⟡ *::* *#mediafire* • *#mf* \`<link>\`
+> » Descarga un archivo de Mediafire.
+⟡ *::* *#youtube* \`<link>\`
+> » Descarga un mp3 o mp4 de YouTube.
+⟡ *::* *#play* \`<query/url>\`
+> » Descarga música o video de YouTube.
+⟡ *::* *#ytmp3* \`<link>\`
+> » Descarga audio de YouTube.
+⟡ *::* *#ytmp4* \`<link>\`
+> » Descarga video de YouTube.
+⟡ *::* *#fb* \`<link>\`
+> » Descarga un video de Facebook.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
- ୨୧ — Gacha
-╰↷ Colecciona waifus y intercambialos.
+ ⊹ *Buscadores*
+ ִ ࣪ ˖ ࣪ \`E𝗇𝖼𝗎𝖾𝗇𝗍𝗋𝖺 𝗅𝗈 𝗊𝗎𝖾 𝗇𝖾𝖼𝖾𝗌𝗂𝗍𝖺𝗌 𝖾𝗇 𝗅𝖺 𝗐𝖾𝖻\`
+⟡ *::* *#googleimages* • *#gimg* \`<texto>\`
+> » Busca imágenes en Google.
+⟡ *::* *#pinterest* \`<texto>\`
+> » Busca imágenes en Pinterest.
+⟡ *::* *#spotify* • *#song* \`<texto>\`
+> » Busca y descarga música de Spotify.
+⟡ *::* *#soundcloud* \`<texto>\`
+> » Busca y descarga música de SoundCloud.
+⟡ *::* *#tiktoksearch* • *#ttss* \`<texto>\`
+> » Busca videos en TikTok (carousel).
+⟡ *::* *#wikipedia* • *#wiki* \`<texto>\`
+> » Busca información en Wikipedia.
+⟡ *::* *#lyrics* • *#letra* \`<texto>\`
+> » Busca letras de canciones.
+⟡ *::* *#apk* • *#modapk* \`<texto>\`
+> » Busca y descarga aplicaciones APK.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
-✿ *#claim* » *#c* 
-> ➥ Reclama una waifu aleatoria.
-✿ *#harem* » *#miswaifu*
-> ➥ Mira las waifus que tienes.
-✿ *#rollwaifu* » *#rw*
-> ➥ Mira una waifu aleatoria
-✿ *#give* » *#regalar* + [ id ] + [ @user ]
-> ➥ Regala una waifu a alguien.
-✿ *#sell* » *#vender* + [ id ]
-> ➥ Vende un personaje.
-✿ *#antirobo* » *#proteger* + [ hora/dia/semana/mes ]
-> ➥ Protege tus waifus de robos.
-✿ *#dar* + [ @user ] + [ id ]
-> ➥ Da un personaje a otro usuario.
-✿ *#desbloquear* » *#unlock* + [ @user ]
-> ➥ Desbloquea la base de un usuario.
-✿ *#listawaifus* » *#listwaifus* + [ página ]
-> ➥ Muestra la lista completa de personajes.
-✿ *#robarwaifu* » *#robar* + [ id ]
-> ➥ Roba un personaje de otro usuario.
-✿ *#resetwaifus*
-> ➥ Reinicia todas las waifus (solo owner).
-✿ *#delwaifu* + [ id ]
-> ➥ Elimina una waifu de tu colección.
-✿ *#vote*
-> ➥ Vota por tu waifu favorita.
-✿ *#wimage* + [ nombre ]
-> ➥ Busca una imagen de un personaje.
-✿ *#winfo* + [ nombre ]
-> ➥ Mira la información de un personaje.
-✿ *#wvideo* + [ nombre ]
-> ➥ Mira un video de un personaje.
-✿ *#ainfo* + [ anime ]
-> ➥ Ver todos los personajes de un anime específico.
-✿ *#wtop*
-> ➥ Mira el top de waifus más populares.
-✿ *#trade* » *#intercambio* + [ tu_personaje ] + [ su_personaje ] + [ @user ]
-> ➥ Intercambia personajes con otro usuario.
+ ⊹ *Utilidades*
+ ִ ࣪ ˖ ࣪ \`C𝗈𝗆𝖺𝗇𝖽𝗈𝗌 ú𝗍𝗂𝗅𝖾𝗌\`
+⟡ *::* *#ping* • *#p*
+> » Calcula la velocidad del bot.
+⟡ *::* *#ai* • *#ia* \`<texto>\`
+> » Consulta con Gemini.
+⟡ *::* *#gemini* \`<texto>\`
+> » Consulta con Gemini AI.
+⟡ *::* *#copilot* \`<texto>\`
+> » Habla con Microsoft Copilot AI.
+⟡ *::* *#claude* \`<texto>\`
+> » Habla con Anthropic Claude AI.
+⟡ *::* *#sticker* • *#s*
+> » Crea un sticker de una imagen o video.
+⟡ *::* *#toimg* • *#img*
+> » Convierte un sticker en imagen.
+⟡ *::* *#suggest* \`<texto>\`
+> » Envía una sugerencia al administrador.
+⟡ *::* *#hd*
+> » Mejora la calidad de una imagen (responde a imagen).
+⟡ *::* *#obtenerinfo* \`<@user>\`
+> » Obtiene información de JID de un usuario.
+⟡ *::* *#wanted* \`<@user>\`
+> » Crea un poster de "Se Busca".
+⟡ *::* *#speak* \`<texto>\`
+> » Convierte texto a voz (Adam).
+⟡ *::* *#pfp* • *#perfil* \`<@user>\`
+> » Obtiene la foto de perfil de un usuario.
+⟡ *::* *#status* • *#estado*
+> » Muestra el estado del bot (uptime, RAM, plataforma).
+⟡ *::* *#vision* \`<imagen>\`
+> » Analiza imágenes con IA.
+⟡ *::* *#get* \`<url>\`
+> » Realiza una petición HTTP GET.
+⟡ *::* *#ss* \`<url>\`
+> » Toma una captura de pantalla de una web.
+⟡ *::* *#sora* \`<texto>\`
+> » Genera un video con Sora AI.
+⟡ *::* *#profile*
+> » Mira tu tarjeta de usuario y estadísticas.
+⟡ *::* *#setbirth* \`<DD/MM/YYYY>\`
+> » Establece tu fecha de nacimiento.
+⟡ *::* *#setgen* \`<m/f>\`
+> » Establece tu género.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
- ୨୧ — Descargas
-╰↷ Comandos para descargar algun contenido de una plataforma.
+ ⊹ *Diversión*
+ ִ ࣪ ˖ ࣪ \`C𝗈𝗆𝖺𝗇𝖽𝗈𝗌 𝗉𝖺𝗋𝖺 𝗂𝗇𝗍𝖾𝗋𝖺𝖼𝗍𝗎𝖺𝗋\`
+⟡ *::* *#sleep* \`<@user>\`
+> » Duerme o toma una siesta con alguien.
+⟡ *::* *#hug* \`<@user>\`
+> » Abraza a alguien.
+⟡ *::* *#cry* \`<@user>\`
+> » Llora por alguien o algo.
+⟡ *::* *#kiss* \`<@user>\`
+> » Besa a alguien.
+⟡ *::* *#textpro* \`<efecto>\` \`<texto>\`
+> » Crea imágenes con texto (neon, magma, etc).
+⟡ *::* *#dance* \`<@user>\`
+> » Baila solo o con alguien.
+⟡ *::* *#kill* \`<@user>\`
+> » Mata a alguien (o suicidate).
+⟡ *::* *#angry* \`<@user>\`
+> » Muestra tu enojo.
+⟡ *::* *#bored* \`<@user>\`
+> » Expresa tu aburrimiento.
+⟡ *::* *#coffee* \`<@user>\`
+> » Toma café solo o acompañado.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
-✿ *#ig* + [ link ]
-> ➥ Descarga un video de un video de instagram.
-✿ *#tiktok* + [ link ]
-> ➥ Descarga un video de tiktok.
-✿ *#mediafire* » *#mf* + [ link ]
-> ➥ Descarga un archivo de Mediafire.
-✿ *#youtube* + [ link ]
-> ➥ Descarga un mp3 o un mp4 de youtube.
-✿ *#play* + [ query/url ]
-> ➥ Descarga música o video de YouTube.
-✿ *#ytmp3* + [ link ]
-> ➥ Descarga audio de YouTube.
-✿ *#ytmp4* + [ link ]
-> ➥ Descarga video de YouTube.
-✿ *#fb* + [ link ]
-> ➥ Descarga un video de Facebook.
+ ⊹ *Juegos*
+ ִ ࣪ ˖ ࣪ \`D𝗂𝗏𝗂é𝗋𝗍𝖾𝗍𝖾 𝖼𝗈𝗇 𝖾𝗌𝗍𝗈𝗌 𝗆𝗂𝗇𝗂𝗃𝗎𝖾𝗀𝗈𝗌\`
+⟡ *::* *#tictactoe* • *#ttt* \`<@user>\`
+> » Juega al gato (tres en raya).
+⟡ *::* *#math*
+> » Resuelve problemas matemáticos.
+⟡ *::* *#love* \`<@user>\`
+> » Calculadora de amor.
+⟡ *::* *#gay* \`<@user>\`
+> » Calculadora de porcentaje gay.
+⟡ *::* *#ppt* \`<piedra/papel/tijera>\`
+> » Juega Piedra, Papel o Tijera.
+⟡ *::* *#ship* \`<@user1>\` \`<@user2>\`
+> » Calcula la compatibilidad de amor entre dos personas.
+⟡ *::* *#fight* • *#pelea* \`<@user>\`
+> » Pelea épica contra alguien (sistema de HP).
+⟡ *::* *#dare* • *#reto* \`<@user>\`
+> » Dale un reto a alguien.
+⟡ *::* *#truth* • *#verdad* \`<@user>\`
+> » Hazle una pregunta de verdad a alguien.
+⟡ *::* *#marry* • *#casar* \`<@user>\`
+> » Matrimonio virtual con alguien.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
- ୨୧ — Buscadores
-╰↷ Encuentra lo que necesitas en la web.
+ ⊹ *Subbot*
+ ִ ࣪ ˖ ࣪ \`C𝗈𝗇𝗏𝗂𝖾𝗋𝗍𝖾 𝗍𝗎 𝗇ú𝗆𝖾𝗋𝗈 𝖾𝗇 𝗎𝗇 𝖻𝗈𝗍\`
+⟡ *::* *#code*
+> » Obtén un código de 8 dígitos para vincular tu número.
+⟡ *::* *#qr* \`<código>\`
+> » Obtén un código QR para vincularte.
+⟡ *::* *#jadibot*
+> » Muestra las opciones para convertirte en subbot.
+⟡ *::* *#stopbot*
+> » Detén tu subbot vinculado.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
-✿ *#googleimages* » *#gimg* + [ texto ]
-> ➥ Busca imágenes en Google.
-✿ *#pinterest* + [ texto ]
-> ➥ Busca imágenes en Pinterest.
-✿ *#spotify* » *#song* + [ texto ]
-> ➥ Busca y descarga música de Spotify.
-✿ *#soundcloud* + [ texto ]
-> ➥ Busca y descarga música de SoundCloud.
-✿ *#tiktoksearch* » *#ttss* + [ texto ]
-> ➥ Busca videos en TikTok (carousel).
-✿ *#wikipedia* » *#wiki* + [ texto ]
-> ➥ Busca información en Wikipedia.
-✿ *#lyrics* » *#letra* + [ texto ]
-> ➥ Busca letras de canciones.
-✿ *#apk* » *#modapk* + [ texto ]
-> ➥ Busca y descarga aplicaciones APK.
+ ⊹ *NSFW*
+ ִ ࣪ ˖ ࣪ \`C𝗈𝗇𝗍𝖾𝗇𝗂𝖽𝗈 𝗉𝖺𝗋𝖺 𝖺𝖽𝗎𝗅𝗍𝗈𝗌\`
+⟡ *::* *#hbikini*
+> » Imágenes de chicas en bikini.
+⟡ *::* *#himages*
+> » Imágenes hentai aleatorias.
+⟡ *::* *#pornvideo*
+> » Videos porno aleatorios.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*
 
- ୨୧ — Utilidades
-╰↷ Comandos utiles 
-
-✿ *#ping* » *#p*
-> ➥ Calcula la velocidad del bot.
-✿ *#ai* » *ia* + [ texto ]
-> ➥ Consulta con Gemini.
-✿ *#gemini* + [ texto ]
-> ➥ Consulta con Gemini AI.
-✿ *#copilot* + [ texto ]
-> ➥ Habla con Microsoft Copilot AI.
-✿ *#claude* + [ texto ]
-> ➥ Habla con Anthropic Claude AI.
-✿ *#sticker* » *#s*
-> ➥ Crea un sticker de una imagen o video.
-✿ *#toimg* » *#img*
-> ➥ Convierte un sticker en imagen.
-✿ *#suggest* + [ texto ]
-> ➥ Envía una sugerencia al administrador.
-✿ *#hd*
-> ➥ Mejora la calidad de una imagen (responde a imagen).
-✿ *#obtenerinfo* + [ @user ]
-> ➥ Obtiene información de JID de un usuario.
-✿ *#wanted* + [ @user ]
-> ➥ Crea un poster de "Se Busca".
-✿ *#speak* + [ texto ]
-> ➥ Convierte texto a voz (Adam).
-✿ *#pfp* » *#perfil* + [ @user ]
-> ➥ Obtiene la foto de perfil de un usuario.
-✿ *#status* » *#estado*
-> ➥ Muestra el estado del bot (uptime, RAM, plataforma).
-
- ୨୧ — Diversión
-╰↷ Comandos para interactuar.
-
-✿ *#sleep* + [ @user ]
-> ➥ Duerme o toma una siesta con alguien.
-✿ *#hug* + [ @user ]
-> ➥ Abraza a alguien.
-✿ *#cry* + [ @user ]
-> ➥ Llora por alguien o algo.
-✿ *#kiss* + [ @user ]
-> ➥ Besa a alguien.
-
- ୨୧ — Subbot
-╰↷ Convierte tu número en un bot.
-
-✿ *#qr*
-> ➥ Obtén un código QR para vincularte.
-✿ *#code*
-> ➥ Obtén un código de emparejamiento.
-✿ *#jadibot* + [ numero ]
-> ➥ Obtén un código de 8 dígitos para vincularte.
-✿ *#list*
-> ➥ Lista los subbots activos.
-✿ *#stop*
-> ➥ Detén tu subbot.
-
- ୨୧ — NSFW
-╰↷ Contenido para adultos (solo grupos permitidos).
-
-✿ *#hbikini*
-> ➥ Imágenes de chicas en bikini.
-✿ *#himages*
-> ➥ Imágenes hentai aleatorias.
-✿ *#pornvideo*
-> ➥ Videos porno aleatorios.
-
- ୨୧ — Administración
-╰↷ Administra tu grupo y/o comunidad de manera mas sencilla
-
-✿ *#kick* + [ @user ]
-> ➥ Expulsa a alguien del grupo.
-✿ *#ban* + [ @user ]
-> ➥ Banea a alguien del grupo.
-✿ *#antilink* + [ on/off ]
-> ➥ Desactiva o activa el antilink.
-✿ *#tag* + [ text ]
-> ➥ Anuncia un mensaje a todo el grupo.
-✿ *#promote* + [ @user ]
-> ➥ promueve a alguien a administrador.
-✿ *#demote* + [ @user ]
-> ➥ Remueve el administrador a alguien.
-✿ *#welcome* + [ on/off ]
-> ➥ Activa o desactiva la funcion de bienvenida.
-✿ *#alertas* + [ on/off ]
-> ➥ Activa o desactiva el sistema de alertas.
-✿ *#kickall*
-> ➥ Elimina a todos los no-admins del grupo.
-✿ *#link* » *#enlace*
-> ➥ Obtiene el enlace de invitación del grupo.
-
-────୨ৎ────`;
+ ⊹ *Administración*
+ ִ ࣪ ˖ ࣪ \`A𝖽𝗆𝗂𝗇𝗂𝗌𝗍𝗋𝖺 𝗍𝗎 𝗀𝗋𝗎𝗉𝗈 𝗒/𝗈 𝖼𝗈𝗆𝗎𝗇𝗂𝖽𝖺𝖽\`
+⟡ *::* *#kick* \`<@user>\`
+> » Expulsa a alguien del grupo.
+⟡ *::* *#ban* \`<@user>\`
+> » Banea a alguien del grupo.
+⟡ *::* *#antilink* \`<on/off>\`
+> » Activa el antilink (elimina enlaces de todos).
+⟡ *::* *#tag* \`<text>\`
+> » Anuncia un mensaje a todo el grupo.
+⟡ *::* *#promote* \`<@user>\`
+> » Promueve a alguien a administrador.
+⟡ *::* *#demote* \`<@user>\`
+> » Remueve el administrador a alguien.
+⟡ *::* *#welcome* \`<on/off>\`
+> » Activa/desactiva mensajes de bienvenida.
+⟡ *::* *#goodbye* \`<on/off>\`
+> » Activa/desactiva mensajes de despedida.
+⟡ *::* *#alertas* \`<on/off>\`
+> » Activa o desactiva el sistema de alertas.
+⟡ *::* *#kickall*
+> » Elimina a todos los no-admins del grupo.
+⟡ *::* *#link* • *#enlace*
+> » Obtiene el enlace de invitación del grupo.
+*⊱⋅ ────── ⊹ ────── ⋅⊰*`;
 
         try {
             await ctx.bot.sendMessage(ctx.chatId, {
-                text: helpText,
+                image: { url: './images/menu.jpg' },
+                caption: helpText,
                 contextInfo: {
                     isForwarded: true,
+                    forwardingScore: 2025,
                     forwardedNewsletterMessageInfo: {
                         newsletterJid: "120363421377964290@newsletter",
                         newsletterName: "𝕻𝖔𝖜𝖊𝖗𝖊𝖉 𝕭𝐲 𝕯𝖊𝖑𝖙𝖆𝕭𝐲𝖙𝖊",
                         serverMessageId: 1,
                     },
-                    externalAdReply: {
-                        title: "Kaoruko Waguri",
-                        body: "𝕻𝖔𝖜𝖊𝖗𝖊𝖉 𝕭𝐲 𝕯𝖊𝖑𝖙𝖆𝕭𝐲𝖙𝖊",
-                        thumbnailUrl: "https://rogddqelmxyuvhpjvxbf.supabase.co/storage/v1/object/public/files/647jkw8t5rv.jpg",
-                        mediaType: 1,
-                        sourceUrl: "https://whatsapp.com/channel/0029VbB9SA10rGiQvM2DMi2p",
-                        renderLargerThumbnail: true,
-                    },
                 },
             });
         } catch (error) {
             console.error('[DEBUG] Error sending help with metadata:', error);
-            await ctx.reply(helpText);
+            ctx.reply(helpText);
         }
     }
 };

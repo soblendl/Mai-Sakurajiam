@@ -1,16 +1,22 @@
+﻿import { styleText } from '../lib/utils.js';
+
 export default {
     commands: ['ping', 'p'],
-    
+
     async execute(ctx) {
         const start = Date.now();
-        await ctx.reply('ꕥ Pong!');
-        const end = Date.now();
-        const latency = end - start;
-        
-        await ctx.reply(
+        const sent = await ctx.reply(styleText(
             `ꕥ *Velocidad del Bot*\n\n` +
-            `ꕥ Latencia: ${latency}ms\n` +
-            `ꕥ Estado: Online ꕥ`
-        );
+            `> Latencia » Calculando...`
+        ));
+        const latency = Date.now() - start;
+        await ctx.bot.sendMessage(ctx.chatId, {
+            text: styleText(
+                `ꕥ *Velocidad del Bot*\n\n` +
+                `> Latencia » ${latency}ms\n` +
+                `> Estado » Online`
+            ),
+            edit: sent.key
+        });
     }
 };

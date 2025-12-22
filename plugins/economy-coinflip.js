@@ -1,4 +1,4 @@
-import { formatNumber } from '../lib/utils.js';
+﻿import { formatNumber, styleText } from '../lib/utils.js';
 
 export default {
     commands: ['coinflip', 'cf'],
@@ -20,7 +20,7 @@ export default {
         }
 
         const userData = ctx.dbService.getUser(ctx.sender);
-        if (userData.coins < amount) {
+        if ((userData.economy?.coins || 0) < amount) {
             return await ctx.reply('ꕤ No tienes suficientes coins.');
         }
 
@@ -28,13 +28,17 @@ export default {
         const won = result === choice;
 
         if (won) {
-            userData.coins += amount;
-            ctx.dbService.markDirty();
-            await ctx.reply(`ꕥ ¡Salió *${result}*! Ganaste *${amount}* coins.`);
+            ctx.dbService.updateUser(ctx.sender, {
+                'economy.coins': (userData.economy?.coins || 0) + amount
+            });
+            await ctx.dbService.save();
+            await ctx.reply(styleText(`ꕥ ¡Salió *${result}*! Ganaste *¥${formatNumber(amount)}* coins.`));
         } else {
-            userData.coins -= amount;
-            ctx.dbService.markDirty();
-            await ctx.reply(`ꕤ Salió *${result}*. Perdiste *${amount}* coins.`);
+            ctx.dbService.updateUser(ctx.sender, {
+                'economy.coins': (userData.economy?.coins || 0) - amount
+            });
+            await ctx.dbService.save();
+            await ctx.reply(styleText(`ꕤ Salió *${result}*. Perdiste *¥${formatNumber(amount)}* coins.`));
         }
     }
 };

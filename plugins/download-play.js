@@ -1,18 +1,10 @@
-import yts from 'yt-search';
+﻿import yts from 'yt-search';
 import axios from 'axios';
+import { styleText } from '../lib/utils.js';
 
 const tempStorage = {};
 
-const axiosConfig = {
-    timeout: 15000,
-    headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'Accept': 'application/json, text/plain, */*',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Connection': 'keep-alive',
-        'Referer': 'https://www.youtube.com/'
-    }
-};
+const ULTRA_API_KEY = "sk_d5a5dec0-ae72-4c87-901c-cccce885f6e6";
 
 export default {
     commands: ['play', 'play2'],
@@ -28,64 +20,77 @@ export default {
 
         delete tempStorage[sender];
         const isAudio = text === '🎶' || text === 'audio';
-        await ctx.reply(`⏳ Descargando ${isAudio ? 'audio' : 'video'}...`);
+        await ctx.reply(styleText(`⏳ Descargando ${isAudio ? 'audio' : 'video'} de *${userData.title}*...`));
 
         try {
-            let mediaUrl;
             if (isAudio) {
-                mediaUrl = await getAudioUrl(userData.url);
-                if (mediaUrl) {
+                const info = await ytMp3(userData.url);
+                if (info && info.media && info.media.audio) {
                     await bot.sock.sendMessage(chatId, {
-                        audio: { url: mediaUrl.url },
+                        audio: { url: info.media.audio },
                         mimetype: 'audio/mpeg',
-                        fileName: `${cleanFileName(userData.title)}.mp3`
+                        fileName: `${cleanFileName(userData.title)}.mp3`,
+                        contextInfo: {
+                            externalAdReply: {
+                                title: info.title || userData.title,
+                                body: info.author?.name || userData.author,
+                                thumbnailUrl: info.cover || userData.thumbnail,
+                                sourceUrl: userData.url,
+                                mediaType: 1,
+                                renderLargerThumbnail: true
+                            }
+                        }
                     }, { quoted: ctx.msg });
-                    await ctx.reply(`✅ Audio descargado usando: ${mediaUrl.api}`);
+                    await ctx.reply(styleText(`ꕤ Audio enviado.`));
                 } else {
-                    await ctx.reply('❌ No se pudo descargar el audio. Todas las APIs fallaron.');
+                    await ctx.reply(styleText('ꕤ No se pudo obtener el enlace de descarga del audio.'));
                 }
             } else {
-                mediaUrl = await getVideoUrl(userData.url);
-                if (mediaUrl) {
+                const info = await ytMp4(userData.url);
+                const videoUrl = info?.url || info?.media?.video;
+                if (videoUrl) {
                     await bot.sock.sendMessage(chatId, {
-                        video: { url: mediaUrl.url },
-                        caption: `⟡ *${userData.title}*`,
+                        video: { url: videoUrl },
+                        caption: styleText(`⟡ *${userData.title}*`),
                         fileName: `${cleanFileName(userData.title)}.mp4`,
-                        mimetype: 'video/mp4'
+                        mimetype: 'video/mp4',
+                        contextInfo: {
+                            externalAdReply: {
+                                title: userData.title,
+                                body: userData.author,
+                                thumbnailUrl: userData.thumbnail,
+                                sourceUrl: userData.url,
+                                mediaType: 1,
+                                renderLargerThumbnail: true
+                            }
+                        }
                     }, { quoted: ctx.msg });
-                    await ctx.reply(`✅ Video descargado usando: ${mediaUrl.api}`);
+                    await ctx.reply(styleText(`ꕤ Video enviado.`));
                 } else {
-                    await ctx.reply('❌ No se pudo descargar el video. Todas las APIs fallaron.');
+                    await ctx.reply(styleText('ꕤ No se pudo obtener el enlace de descarga del video.'));
                 }
             }
         } catch (error) {
             console.error('Error downloading media:', error);
-            await ctx.reply(`❌ Error: ${error.message || 'Error desconocido'}`);
+            await ctx.reply(styleText(`ꕤ Error: ${error.message || 'Error desconocido'}`));
         }
     },
-
     async execute(ctx) {
         const { args, sender, bot, chatId } = ctx;
-
         if (args.length === 0) {
-            return await ctx.reply('ꕤ Debes ingresar el nombre de la canción.\nEjemplo: #play Billie Eilish');
+            return await ctx.reply(styleText('ꕤ Debes ingresar el nombre de la canción.\nEjemplo: #play Billie Eilish'));
         }
-
-        await ctx.reply('⏳ Buscando...');
-
+        await ctx.reply(styleText('ꕤ Buscando...'));
         try {
             const query = args.join(' ');
             const searchResults = await yts(query);
             const video = searchResults.videos[0];
-
             if (!video) {
-                return await ctx.reply('ꕤ No se encontraron resultados.');
+                return await ctx.reply(styleText('ꕤ No se encontraron resultados.'));
             }
-
             if (video.seconds > 1800) {
-                return await ctx.reply('❌ El video supera los 30 minutos de duración.');
+                return await ctx.reply(styleText('ꕤ El video supera los 30 minutos de duración.'));
             }
-
             tempStorage[sender] = {
                 url: video.url,
                 title: video.title,
@@ -106,145 +111,36 @@ export default {
 Responde con:
 🎶 o *audio* para audio
 📽 o *video* para video`;
-
             await bot.sock.sendMessage(chatId, {
                 image: { url: video.thumbnail },
-                caption: text
+                caption: styleText(text)
             }, { quoted: ctx.msg });
         } catch (error) {
             console.error('Error in play command:', error);
-            await ctx.reply(`ꕤ Error al buscar: ${error.message}`);
+            await ctx.reply(styleText(`ꕤ Error al buscar: ${error.message}`));
         }
     }
 };
-
-async function getAudioUrl(url) {
-    const apis = [
-        {
-            name: "Tobat",
-            call: async () => {
-                const res = await axios.get(`https://ytb.tobat.me/ytmp3?url=${encodeURIComponent(url)}`, axiosConfig);
-                return res.data?.result || res.data?.url;
-            }
-        },
-        {
-            name: "Xyro",
-            call: async () => {
-                const res = await axios.get(`https://api.xyro.site/download/youtubemp3?url=${encodeURIComponent(url)}`, axiosConfig);
-                return res.data?.result?.download;
-            }
-        },
-        {
-            name: "ZenzzXD",
-            call: async () => {
-                const res = await axios.get(`https://api.zenzxz.my.id/downloader/ytmp3?url=${encodeURIComponent(url)}`, axiosConfig);
-                return res.data?.data?.download_url || res.data?.data?.url;
-            }
-        },
-        {
-            name: "Yupra",
-            call: async () => {
-                const res = await axios.get(`https://api.yupra.my.id/api/downloader/ytmp3?url=${encodeURIComponent(url)}`, axiosConfig);
-                return res.data?.result?.link;
-            }
-        },
-        {
-            name: "Delirius",
-            call: async () => {
-                const res = await axios.get(`https://api.delirius.store/downloader/youtube-mp3?url=${encodeURIComponent(url)}`, axiosConfig);
-                return res.data?.result?.url;
-            }
-        }
-    ];
-
-    return await fetchFastestApi(apis);
+async function ytMp3(url) {
+    const { data } = await axios.post("https://api-sky.ultraplus.click/youtube-mp3", { url }, {
+        headers: { apikey: ULTRA_API_KEY }
+    });
+    if (data.status) return data.result;
+    throw new Error(data.message || "Error al procesar MP3");
 }
-
-async function getVideoUrl(url) {
-    const apis = [
-        {
-            name: "Tobat",
-            call: async () => {
-                const res = await axios.get(`https://ytb.tobat.me/ytmp4?url=${encodeURIComponent(url)}`, axiosConfig);
-                return res.data?.result || res.data?.url;
-            }
-        },
-        {
-            name: "Xyro",
-            call: async () => {
-                const res = await axios.get(`https://api.xyro.site/download/youtubemp4?url=${encodeURIComponent(url)}&quality=360`, axiosConfig);
-                return res.data?.result?.download;
-            }
-        },
-        {
-            name: "ZenzzXD",
-            call: async () => {
-                const res = await axios.get(`https://api.zenzxz.my.id/downloader/ytmp4?url=${encodeURIComponent(url)}&resolution=360p`, axiosConfig);
-                return res.data?.data?.download_url || res.data?.data?.url;
-            }
-        },
-        {
-            name: "Yupra",
-            call: async () => {
-                const res = await axios.get(`https://api.yupra.my.id/api/downloader/ytmp4?url=${encodeURIComponent(url)}`, axiosConfig);
-                return res.data?.result?.formats?.[0]?.url;
-            }
-        },
-        {
-            name: "Delirius",
-            call: async () => {
-                const res = await axios.get(`https://api.delirius.store/downloader/youtube-mp4?url=${encodeURIComponent(url)}&quality=360`, axiosConfig);
-                return res.data?.result?.url;
-            }
-        }
-    ];
-
-    return await fetchFastestApi(apis);
-}
-
-async function fetchFastestApi(apis) {
-    const promises = apis.map(api =>
-        Promise.race([
-            api.call()
-                .then(result => {
-                    if (result && isValidUrl(result)) {
-                        return { success: true, url: result, api: api.name };
-                    }
-                    throw new Error('URL inválida');
-                })
-                .catch(error => ({ success: false, error: error.message, api: api.name })),
-            new Promise((resolve) =>
-                setTimeout(() => resolve({ success: false, error: 'Timeout', api: api.name }), 10000)
-            )
-        ])
+async function ytMp4(url) {
+    const { data } = await axios.post("https://api-sky.ultraplus.click/youtube-mp4/resolve",
+        { url: url, type: "video", quality: "720" },
+        { headers: { apikey: ULTRA_API_KEY } }
     );
-
-    const results = await Promise.all(promises);
-
-    const successful = results.filter(r => r.success);
-
-    if (successful.length > 0) {
-        console.log(`✅ API exitosa: ${successful[0].api}`);
-        return successful[0];
-    }
-
-    console.error('❌ Todas las APIs fallaron:', results.map(r => `${r.api}: ${r.error}`));
-    return null;
+    if (data.result?.media?.video) return { url: data.result.media.video };
+    if (data.url) return { url: data.url };
+    if (data.result?.url) return { url: data.result.url };
+    return data.result;
 }
-
-function isValidUrl(string) {
-    try {
-        const url = new URL(string);
-        return url.protocol === 'http:' || url.protocol === 'https:';
-    } catch (_) {
-        return false;
-    }
-}
-
 function cleanFileName(name) {
     return name.replace(/[<>:"/\\|?*]/g, "").substring(0, 50);
 }
-
 function formatViews(views) {
     if (!views) return "No disponible";
     if (views >= 1e9) return (views / 1e9).toFixed(1) + "B";
