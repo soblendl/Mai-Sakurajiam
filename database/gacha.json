@@ -6497,5 +6497,646 @@
       "user": null,
       "status": "Libre",
       "votes": 0
+    },
+    {
+      "id": "356",
+      "name": "Noriyasu Seta",
+      "gender": "Hombre",
+      "value": "226",
+      "source": "Love Hina",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Noriyasu_Seta_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "357",
+      "name": "Reina Ruu",
+      "gender": "Mujer",
+      "value": "192",
+      "source": "Isekai Ryouridou",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Reina_Ruu_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "358",
+      "name": "Ryoma Ichijo",
+      "gender": "Hombre",
+      "value": "1139",
+      "source": "Love Stage!!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Ryoma_Ichijo_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "359",
+      "name": "Cocona Kokomine",
+      "gender": "Mujer",
+      "value": "1643",
+      "source": "Flip Flappers",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Cocona_Kokomine_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "360",
+      "name": "Shogun Raiden",
+      "gender": "Mujer",
+      "value": "15378",
+      "source": "Genshin Impact",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Shogun_Raiden_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "361",
+      "name": "Priscilla Barielle",
+      "gender": "Mujer",
+      "value": "15221",
+      "source": "Re:Zero",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Priscilla_Barielle_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "362",
+      "name": "Kannon",
+      "gender": "Mujer",
+      "value": "97",
+      "source": "World Flipper",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Kannon_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "363",
+      "name": "Stygian Zinogre",
+      "gender": "Desconocido",
+      "value": "98",
+      "source": "Monster Hunter",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Stygian_Zinogre_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "364",
+      "name": "Deian",
+      "gender": "Mujer",
+      "value": "144",
+      "source": "Mabinogi",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Deian_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "365",
+      "name": "Anna Mochizuki",
+      "gender": "Mujer",
+      "value": "8367",
+      "source": "iDOLM@STER",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Anna_Mochizuki_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "356",
+      "name": "Anna Mochizuki",
+      "gender": "Mujer",
+      "value": "8367",
+      "source": "iDOLM@STER",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Anna_Mochizuki_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "357",
+      "name": "Hoover Aisla",
+      "gender": "Hombre",
+      "value": "181",
+      "source": "Gundam Series",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Hoover_Aisla_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "358",
+      "name": "Matsuge",
+      "gender": "Hombre",
+      "value": "1860",
+      "source": "One Punch Man",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Matsuge_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "359",
+      "name": "Sakon Shima",
+      "gender": "Hombre",
+      "value": "226",
+      "source": "Sengoku Basara",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Sakon_Shima_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "360",
+      "name": "Earthy",
+      "gender": "Mujer",
+      "value": "544",
+      "source": "Cardcaptor Sakura",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Earthy_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "361",
+      "name": "Yukimura Sanada (Sengoku Basara)",
+      "gender": "Hombre",
+      "value": "1379",
+      "source": "Sengoku Basara",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Yukimura_Sanada_(Sengoku_Basara)_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "362",
+      "name": "Yoshihiro Shimazu",
+      "gender": "Hombre",
+      "value": "673",
+      "source": "Sengoku Basara",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Yoshihiro_Shimazu_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "363",
+      "name": "Masamune Date",
+      "gender": "Hombre",
+      "value": "641",
+      "source": "Sengoku Basara",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Masamune_Date_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "364",
+      "name": "Sasuke Sarutobi",
+      "gender": "Hombre",
+      "value": "515",
+      "source": "Sengoku Basara",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Sasuke_Sarutobi_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "365",
+      "name": "Kanetsugu Naoe (Sengoku Basara)",
+      "gender": "Hombre",
+      "value": "50",
+      "source": "Sengoku Basara",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Kanetsugu_Naoe_(Sengoku_Basara)_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "366",
+      "name": "Yoshitsugu Ootani",
+      "gender": "Hombre",
+      "value": "311",
+      "source": "Sengoku Basara",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Yoshitsugu_Ootani_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "367",
+      "name": "Jinshi",
+      "gender": "Hombre",
+      "value": "15413",
+      "source": "Kusuriya no Hitorigoto",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Jinshi_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "368",
+      "name": "Pairin",
+      "gender": "Mujer",
+      "value": "15410",
+      "source": "Kusuriya no Hitorigoto",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Pairin_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "369",
+      "name": "Maomao",
+      "gender": "Mujer",
+      "value": "15402",
+      "source": "Kusuriya no Hitorigoto",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Maomao_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "370",
+      "name": "Ah-Duo",
+      "gender": "Mujer",
+      "value": "15254",
+      "source": "Kusuriya no Hitorigoto",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Ah-Duo_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "371",
+      "name": "Lihua",
+      "gender": "Mujer",
+      "value": "15071",
+      "source": "Kusuriya no Hitorigoto",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Lihua_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "372",
+      "name": "Lihua",
+      "gender": "Mujer",
+      "value": "15071",
+      "source": "Kusuriya no Hitorigoto",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Lihua_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "373",
+      "name": "Aki Nijou",
+      "gender": "Mujer",
+      "value": "6884",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Aki_Nijou_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "374",
+      "name": "Minori Rokujou",
+      "gender": "Mujer",
+      "value": "6253",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Minori_Rokujou_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "375",
+      "name": "Espada Love",
+      "gender": "Mujer",
+      "value": "1679",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Espada_Love_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "376",
+      "name": "Azuki Shinatsu",
+      "gender": "Mujer",
+      "value": "1334",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Azuki_Shinatsu_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "377",
+      "name": "Chacha Akaza",
+      "gender": "Mujer",
+      "value": "1262",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Chacha_Akaza_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "378",
+      "name": "Haruko Amaya",
+      "gender": "Mujer",
+      "value": "477",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Haruko_Amaya_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "379",
+      "name": "Inaho Kushiya",
+      "gender": "Mujer",
+      "value": "275",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Inaho_Kushiya_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "380",
+      "name": "Kengo Usui",
+      "gender": "Hombre",
+      "value": "232",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Kengo_Usui_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "381",
+      "name": "Kimi Satou",
+      "gender": "Mujer",
+      "value": "230",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Kimi_Satou_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "382",
+      "name": "Minerva Martha",
+      "gender": "Mujer",
+      "value": "226",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Minerva_Martha_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "383",
+      "name": "Kodama Himegami",
+      "gender": "Mujer",
+      "value": "217",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Kodama_Himegami_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "384",
+      "name": "Celia Ootsuka",
+      "gender": "Mujer",
+      "value": "196",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Celia_Ootsuka_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
+    },
+    {
+      "id": "385",
+      "name": "Takeru Ooyama",
+      "gender": "Hombre",
+      "value": "150",
+      "source": "Maken-Ki!",
+      "img": [
+        "https://raw.githubusercontent.com/soblendl/itsuki-cdn/main/images/Takeru_Ooyama_undefined.jpg"
+      ],
+      "vid": [
+        "no hay xd"
+      ],
+      "user": null,
+      "status": "Libre",
+      "votes": 0
     }
+  ]
 }
