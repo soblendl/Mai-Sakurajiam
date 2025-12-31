@@ -1,5 +1,5 @@
 ﻿
-import { formatNumber, styleText } from '../lib/utils.js';
+import { formatNumber, formatNumberLarge, styleText } from '../lib/utils.js';
 
 export default {
     commands: ['balance', 'bal', 'saldo'],
@@ -10,9 +10,9 @@ export default {
 
         await ctx.reply(styleText(
             `ꕥ *Balance de Usuario*\n\n` +
-            `⟡ Billetera: *¥${formatNumber(economy.coins || 0)}* coins\n` +
-            `⟡ Banco: *¥${formatNumber(economy.bank || 0)}* coins\n` +
-            `⟡ Total: *¥${formatNumber((economy.coins || 0) + (economy.bank || 0))}* coins`
+            `⟡ Billetera: *¥${formatNumberLarge(economy.coins || 0)}* coins\n` +
+            `⟡ Banco: *¥${formatNumberLarge(economy.bank || 0)}* coins\n` +
+            `⟡ Total: *¥${formatNumberLarge((economy.coins || 0) + (economy.bank || 0))}* coins`
         ));
     }
 };

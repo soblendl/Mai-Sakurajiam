@@ -1,4 +1,4 @@
-﻿import { formatNumber, styleText } from '../lib/utils.js';
+﻿import { formatNumber, formatNumberLarge, styleText } from '../lib/utils.js';
 
 export default {
     commands: ['board', 'leaderboard', 'top', 'baltop'],
@@ -52,9 +52,9 @@ export default {
             mentions.push(mentionJid);
 
             message += `${medal} @${displayId}\n`;
-            message += `> ⛃ Coins » *¥${formatNumber(user.coins)}*\n`;
-            message += `> ❖ Banco » *¥${formatNumber(user.bank)}*\n`;
-            message += `> ✧ Total » *¥${formatNumber(user.total)}*\n\n`;
+            message += `> ⛃ Coins » *¥${formatNumberLarge(user.coins)}*\n`;
+            message += `> ❖ Banco » *¥${formatNumberLarge(user.bank)}*\n`;
+            message += `> ✧ Total » *¥${formatNumberLarge(user.total)}*\n\n`;
         });
 
         message += '💫 _Sigue esforzándote!_';

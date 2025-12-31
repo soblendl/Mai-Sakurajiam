@@ -14,7 +14,8 @@ async function fetchImageBuffer(url) {
     try {
         const response = await axios.get(url, {
             responseType: 'arraybuffer',
-            timeout: 10000
+            timeout: 5000, // Reduced timeout for faster response
+            maxRedirects: 3
         });
         const buffer = Buffer.from(response.data);
         // Cache up to 50 images
@@ -79,8 +80,12 @@ export default {
         if (character.img && character.img.length > 0) {
             try {
                 const mentions = character.owner ? [character.owner] : [];
-                // Pre-fetch image as buffer for faster sending
-                const imageBuffer = await fetchImageBuffer(character.img[0]);
+                // Pre-fetch image as buffer for faster sending - with parallel processing
+                const imageBuffer = await Promise.race([
+                    fetchImageBuffer(character.img[0]),
+                    new Promise(resolve => setTimeout(() => resolve(null), 3000)) // 3 second timeout
+                ]);
+
                 if (imageBuffer) {
                     await ctx.bot.sendMessage(ctx.chatId, {
                         image: imageBuffer,
@@ -88,7 +93,7 @@ export default {
                         mentions: mentions
                     });
                 } else {
-                    // Fallback to URL if buffer fetch failed
+                    // Fallback to URL if buffer fetch failed (faster than buffer)
                     await ctx.bot.sendMessage(ctx.chatId, {
                         image: { url: character.img[0] },
                         caption: styleText(message),
@@ -101,8 +106,8 @@ export default {
                 // Check if it's a disk space error
                 if (error.code === 'ENOSPC') {
                     return await ctx.reply(styleText(
-                        `ꕤ Error temporal del servidor (sin espacio).\\n\\n` +
-                        `Mostrando información sin imagen:\\n\\n${message}`
+                        `ꕤ Error temporal del servidor (sin espacio).\n\n` +
+                        `Mostrando información sin imagen:\n\n${message}`
                     ), { mentions: character.owner ? [character.owner] : [] });
                 }
 
