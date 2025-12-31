@@ -1,4 +1,4 @@
-import { styleText, styleMessage } from '../lib/utils.js';
+import { styleText } from '../lib/utils.js';
 import { ERRORS } from '../lib/constants.js';
 
 let wapiModule = null;
@@ -36,30 +36,16 @@ export function setupCommandWorker(bot, services) {
                     return await bot.ws.groupParticipantsUpdate(jid, participants, action);
                 }
             },
-            reply: async (responseText, options = {}) => {
-                const styledOriginal = styleMessage(ctxData.msg.pushName || 'Usuario', ctxData.text);
-                const fullMessage = `${styledOriginal}\n\n${responseText}`;
-                return await bot.ws.sendMessage(ctxData.chatId, { text: fullMessage, ...options }, { quoted: ctxData.msg });
+            reply: async (text, options = {}) => {
+                return await bot.ws.sendMessage(ctxData.chatId, { text, ...options }, { quoted: ctxData.msg });
             },
             replyWithAudio: async (url, options = {}) => {
-                const styledOriginal = styleMessage(ctxData.msg.pushName || 'Usuario', ctxData.text);
-                if (options.caption) {
-                    options.caption = `${styledOriginal}\n\n${options.caption}`;
-                }
                 return await bot.ws.sendMessage(ctxData.chatId, { audio: { url }, mimetype: 'audio/mpeg', ...options }, { quoted: ctxData.msg });
             },
             replyWithVideo: async (url, options = {}) => {
-                const styledOriginal = styleMessage(ctxData.msg.pushName || 'Usuario', ctxData.text);
-                if (options.caption) {
-                    options.caption = `${styledOriginal}\n\n${options.caption}`;
-                }
                 return await bot.ws.sendMessage(ctxData.chatId, { video: { url }, ...options }, { quoted: ctxData.msg });
             },
             replyWithImage: async (url, options = {}) => {
-                const styledOriginal = styleMessage(ctxData.msg.pushName || 'Usuario', ctxData.text);
-                if (options.caption) {
-                    options.caption = `${styledOriginal}\n\n${options.caption}`;
-                }
                 return await bot.ws.sendMessage(ctxData.chatId, { image: { url }, ...options }, { quoted: ctxData.msg });
             },
             download: async (message) => {
