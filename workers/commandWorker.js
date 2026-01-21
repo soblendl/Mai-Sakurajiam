@@ -1,97 +1,72 @@
-import { styleText, styleMessage } from '../lib/utils.js';
-import { ERRORS } from '../lib/constants.js';
-
-let wapiModule = null;
-const getWapi = async () => {
-    if (!wapiModule) {
-        wapiModule = await import('@imjxsx/wapi');
-    }
-    return wapiModule;
-};
+import { downloadContentFromMessage } from '@imjxsx/wapi'
+import { styleText, styleMessage } from '../lib/utils.js'
+import { ERRORS } from '../lib/constants.js'
 
 export function setupCommandWorker(bot, services) {
-    const queue = services.queueManager.getQueue('commandQueue');
+  const queue = services.queueManager.getQueue('commandQueue')
 
-    queue.process(async (job) => {
-        const { commandName, ctxData } = job.data;
-        const commandData = global.commandMap.get(commandName);
+  queue.process(async (job) => {
+    try {
+      const { commandName, ctxData } = job.data
+      const name = commandName?.toLowerCase().trim()
+      const commandData = global.commandMap.get(name)
+      if (!commandData) return
 
-        if (!commandData) {
-            console.error(`Command worker: Command '${commandName}' not found.`);
-            return;
+      const baseStyled = styleMessage(ctxData.msg?.pushName || 'Usuario', ctxData.text)
+
+      const replyBuilder = async (payload, options = {}) => {
+        if (payload?.caption) {
+          payload.caption = `${baseStyled}\n\n${payload.caption}`
+        } else if (payload?.text) {
+          payload.text = `${baseStyled}\n\n${payload.text}`
         }
+        return bot.ws.sendMessage(ctxData.chatId, payload, { quoted: ctxData.msg })
+      }
 
-        const ctx = {
-            ...ctxData,
-            ...services,
-            bot: {
-                sendMessage: async (jid, content, options) => {
-                    return await bot.ws.sendMessage(jid, content, options);
-                },
-                sock: bot.ws,
-                groupMetadata: async (jid) => {
-                    return await bot.ws.groupMetadata(jid);
-                },
-                groupParticipantsUpdate: async (jid, participants, action) => {
-                    return await bot.ws.groupParticipantsUpdate(jid, participants, action);
-                }
-            },
-            reply: async (responseText, options = {}) => {
-                const styledOriginal = styleMessage(ctxData.msg.pushName || 'Usuario', ctxData.text);
-                const fullMessage = `${styledOriginal}\n\n${responseText}`;
-                return await bot.ws.sendMessage(ctxData.chatId, { text: fullMessage, ...options }, { quoted: ctxData.msg });
-            },
-            replyWithAudio: async (url, options = {}) => {
-                const styledOriginal = styleMessage(ctxData.msg.pushName || 'Usuario', ctxData.text);
-                if (options.caption) {
-                    options.caption = `${styledOriginal}\n\n${options.caption}`;
-                }
-                return await bot.ws.sendMessage(ctxData.chatId, { audio: { url }, mimetype: 'audio/mpeg', ...options }, { quoted: ctxData.msg });
-            },
-            replyWithVideo: async (url, options = {}) => {
-                const styledOriginal = styleMessage(ctxData.msg.pushName || 'Usuario', ctxData.text);
-                if (options.caption) {
-                    options.caption = `${styledOriginal}\n\n${options.caption}`;
-                }
-                return await bot.ws.sendMessage(ctxData.chatId, { video: { url }, ...options }, { quoted: ctxData.msg });
-            },
-            replyWithImage: async (url, options = {}) => {
-                const styledOriginal = styleMessage(ctxData.msg.pushName || 'Usuario', ctxData.text);
-                if (options.caption) {
-                    options.caption = `${styledOriginal}\n\n${options.caption}`;
-                }
-                return await bot.ws.sendMessage(ctxData.chatId, { image: { url }, ...options }, { quoted: ctxData.msg });
-            },
-            download: async (message) => {
-                const wapi = await getWapi();
-                const { downloadContentFromMessage } = wapi;
-                const msg = message || ctxData.msg;
-                const type = Object.keys(msg.message)[0];
-                const stream = await downloadContentFromMessage(msg.message[type], type.replace('Message', ''));
-                let buffer = Buffer.from([]);
-                for await (const chunk of stream) {
-                    buffer = Buffer.concat([buffer, chunk]);
-                }
-                return buffer;
-            }
-        };
+      const ctx = {
+        ...services,
+        ...ctxData,
+        bot: {
+          sendMessage: (jid, content, options) => bot.ws.sendMessage(jid, content, options),
+          sock: bot.ws,
+          groupMetadata: (jid) => bot.ws.groupMetadata(jid),
+          groupParticipantsUpdate: (jid, participants, action) =>
+            bot.ws.groupParticipantsUpdate(jid, participants, action)
+        },
+        reply: (text, options = {}) => replyBuilder({ text, ...options }),
+        replyWithAudio: (url, options = {}) =>
+          replyBuilder({ audio: { url }, mimetype: 'audio/mpeg', ...options }),
+        replyWithVideo: (url, options = {}) =>
+          replyBuilder({ video: { url }, ...options }),
+        replyWithImage: (url, options = {}) =>
+          replyBuilder({ image: { url }, ...options }),
+        download: async (message) => {
+          const msg = message || ctxData.msg
+          const type = Object.keys(msg.message)[0]
+          const stream = await downloadContentFromMessage(
+            msg.message[type],
+            type.replace('Message', '')
+          )
+          let buffer = Buffer.from([])
+          for await (const chunk of stream) buffer = Buffer.concat([buffer, chunk])
+          return buffer
+        },
+        userData: ctxData.userData || {}
+      }
 
-        try {
-            await commandData.execute(ctx);
+      await commandData.execute(ctx)
 
-            if (!ctx.userData.stats) ctx.userData.stats = {};
-            ctx.userData.stats.commands = (ctx.userData.stats.commands || 0) + 1;
-            services.dbService.markDirty();
-
-        } catch (error) {
-            console.error(`Error executing command '${commandName}' in worker:`, error);
-            try {
-                await ctx.reply(styleText(ERRORS.GENERIC_ERROR));
-            } catch (e) {
-                console.error(`Failed to send error reply for command '${commandName}':`, e);
-            }
-        }
-    });
-
-    console.log('👷‍♂️ Command worker is ready to process jobs.');
+      ctx.userData.stats = ctx.userData.stats || {}
+      ctx.userData.stats.commands = (ctx.userData.stats.commands || 0) + 1
+      services.dbService.markDirty()
+    } catch (error) {
+      try {
+        await bot.ws.sendMessage(
+          job.data.ctxData.chatId,
+          { text: styleText(ERRORS.GENERIC_ERROR) },
+          { quoted: job.data.ctxData.msg }
+        )
+      } catch {}
+    }
+  })
 }
