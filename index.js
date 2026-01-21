@@ -64,9 +64,7 @@ const UUID = '1f1332f4-7c2a-4b88-b4ca-bd56d07ed713'
 const auth = new LocalAuth(UUID, 'sessions')
 const account = { jid: '', pn: '', name: '' }
 
-const bot = new Bot(UUID, auth, account, {
-  level: 'silent'
-})
+const bot = new Bot(UUID, auth, account)
 
 const pluginsDir = path.join(__dirname, 'plugins')
 const pluginFiles = fs.readdirSync(pluginsDir).filter(f => f.endsWith('.js'))
