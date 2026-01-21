@@ -88,26 +88,18 @@ for (const file of pluginFiles) {
 
 bot.on('qr', async qr => {
   console.clear()
-  const qrText = await QRCode.toString(qr, {
-    type: 'terminal',
-    small: true
-  })
+  const qrText = await QRCode.toString(qr, { type: 'terminal', small: true })
   console.log(qrText)
 })
 
-bot.on('open', () => {
-  const sock = bot.sock
-  if (!sock) return
+bot.on('message', async ctx => {
+  try {
+    await messageHandler.handleMessage(bot, ctx)
+  } catch {}
+})
 
-  sock.ev.on('messages.upsert', async ({ messages }) => {
-    for (const m of messages) {
-      messageHandler.handleMessage(bot, m).catch(() => {})
-    }
-  })
-
-  sock.ev.on('group-participants.update', async event => {
-    welcomeHandler.handle(bot, event).catch(() => {})
-  })
+bot.on('group.participant.add', async ctx => {
+  welcomeHandler.handle(bot, ctx).catch(() => {})
 })
 
 setupCommandWorker(bot, {
