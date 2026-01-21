@@ -1,5 +1,5 @@
-import { Bot, LocalAuth } from '@imjxsx/wapi'
 import QRCode from 'qrcode'
+import { Bot, LocalAuth } from '@imjxsx/wapi'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -64,6 +64,7 @@ const welcomeHandler = new WelcomeHandler(dbService)
 const UUID = '1f1332f4-7c2a-4b88-b4ca-bd56d07ed713'
 const auth = new LocalAuth(UUID, 'sessions')
 const account = { jid: '', pn: '', name: '' }
+
 const bot = new Bot(UUID, auth, account)
 
 const pluginsDir = path.join(__dirname, 'plugins')
@@ -90,22 +91,23 @@ bot.on('qr', async qr => {
   console.log(qrText)
 })
 
-bot.on('open', acc => {
-  console.log(acc?.name || 'Bot conectado')
+bot.on('open', () => {
+  const sock = bot.sock
+  if (!sock) return
+
+  sock.ev.on('messages.upsert', async ({ messages }) => {
+    for (const m of messages) {
+      messageHandler.handleMessage(bot, m).catch(() => {})
+    }
+  })
+
+  sock.ev.on('group-participants.update', async event => {
+    welcomeHandler.handle(bot, event).catch(() => {})
+  })
 })
 
-bot.ws.ev.on('messages.upsert', async ({ messages }) => {
-  for (const m of messages) {
-    messageHandler.handleMessage(bot, m).catch(() => {})
-  }
-})
-
-bot.ws.ev.on('group-participants.update', async event => {
-  welcomeHandler.handle(bot, event).catch(() => {})
-})
-
-bot.on('close', reason => console.log(reason))
-bot.on('error', err => console.error(err))
+bot.on('close', r => console.log(r))
+bot.on('error', e => console.error(e))
 
 setupCommandWorker(bot, {
   dbService,
