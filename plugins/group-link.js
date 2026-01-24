@@ -1,4 +1,4 @@
-﻿import { isBotAdmin, styleText } from '../lib/utils.js';
+﻿import { isBotAdmin, styleText, isAdmin } from '../lib/utils.js';
 
 export default {
     commands: ['link', 'enlace'],
@@ -6,10 +6,17 @@ export default {
     help: ['link'],
 
     async execute(ctx) {
-        const { bot, chatId, isGroup, reply } = ctx;
+        const { bot, chatId, isGroup, reply, sender, senderLid } = ctx;
         const conn = bot?.sock;
 
         if (!isGroup) { return await reply(styleText('ꕤ Este comando solo funciona en grupos.')) }
+
+        const userIdForAdmin = senderLid || sender;
+        const isAdminUser = await isAdmin(bot, chatId, userIdForAdmin);
+
+        if (!isAdminUser) {
+            return await reply(styleText('ꕤ Solo los administradores pueden usar este comando.'));
+        }
         if (!conn) { return await reply(styleText('❌ Error: Conexión no disponible.')) }
         try {
             const botIsAdmin = await isBotAdmin(conn, chatId);

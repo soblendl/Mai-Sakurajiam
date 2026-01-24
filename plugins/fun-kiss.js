@@ -27,14 +27,19 @@ export default {
             try {
                 if (chatId.endsWith('@g.us')) {
                     const groupMetadata = await ctx.bot.groupMetadata(chatId);
-                    const whoNumber = who.split('@')[0].split(':')[0];
+                    const whoId = who.split('@')[0].split(':')[0];
 
                     const participant = groupMetadata.participants.find(p => {
-                        const participantNumber = p.id.split('@')[0].split(':')[0];
-                        return participantNumber === whoNumber;
+                        const pId = p.id.split('@')[0].split(':')[0];
+                        const pLid = p.lid ? p.lid.split('@')[0].split(':')[0] : '';
+                        return pId === whoId || pLid === whoId;
                     });
 
-                    targetName = participant?.notify || participant?.name || whoNumber;
+                    if (participant) {
+                        targetName = participant.notify || participant.name || participant.id.split('@')[0].split(':')[0];
+                    } else {
+                        targetName = whoId;
+                    }
                 } else {
                     targetName = who.split('@')[0].split(':')[0];
                 }

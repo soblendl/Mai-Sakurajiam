@@ -19,8 +19,8 @@ export default {
 
         if (!args[0]) {
             return await reply(styleText(
-                `ꕤ *Uso incorrecto del comando*\\n\\n` +
-                `Ejemplo:\\n` +
+                `ꕤ *Uso incorrecto del comando*\n\n` +
+                `Ejemplo:\n` +
                 `> ${prefix}${command} https://www.xnxx.com/video-example`
             ));
         }
@@ -31,30 +31,28 @@ export default {
         }
 
         try {
-            await reply(styleText('ꕥ Procesando video... 🥵'));
+            await reply(styleText('ꕥ Procesando video... '));
 
-            const response = await axios.post("http://api-sky.ultraplus.click/xnxx",
-                { url: url },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "apikey": "sk_d5a5dec0-ae72-4c87-901c-cccce885f6e6"
-                    }
-                }
-            );
+            const response = await axios.get(`https://api.delirius.store/download/xnxxdl?url=${encodeURIComponent(url)}`);
 
-            const result = response.data?.result;
-
-            if (!response.data?.status || !result || !result.media?.video) {
+            if (!response.data?.status || !response.data?.data) {
                 return await reply(styleText('ꕤ No se pudo descargar el video. Verifica el enlace o intenta de nuevo más tarde.'));
             }
 
-            const { title, duration, media } = result;
-            const videoUrl = media.video;
+            const { title, duration, quality, views, download } = response.data.data;
 
-            const caption = `ꕥ *XNXX Downloader*\\n\\n` +
-                `> *Título* » ${title}\\n` +
-                `> *Duración* » ${duration || 'N/A'}\\n` +
+            // Usar la calidad high, si no existe usar low
+            const videoUrl = download.high || download.low;
+
+            if (!videoUrl) {
+                return await reply(styleText('ꕤ No se encontró un enlace de descarga válido.'));
+            }
+
+            const caption = `ꕥ *XNXX Downloader*\n\n` +
+                `> *Título* » ${title}\n` +
+                `> *Duración* » ${duration || 'N/A'}\n` +
+                `> *Calidad* » ${quality || 'N/A'}\n` +
+                `> *Vistas* » ${views || 'N/A'}\n` +
                 `> *Link* » ${url}`;
 
             await replyWithVideo(videoUrl, {

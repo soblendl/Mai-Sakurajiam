@@ -51,7 +51,7 @@ export default {
         if ((user.economy?.coins || 0) < bet) {
             return await ctx.reply(styleText(`ꕤ No tienes suficientes coins.`));
         }
-        await dbService.updateUser(sender, { 'economy.coins': user.economy.coins - bet });
+        await dbService.updateUser(sender, { 'economy.coins': (user.economy?.coins || 0) - bet });
         const playerHand = [drawCard(), drawCard()];
         const dealerHand = [drawCard(), drawCard()];
         game = {

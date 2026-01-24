@@ -4,13 +4,16 @@ export default {
     commands: ['einfo'],
 
     async execute(ctx) {
-        if (ctx.isGroup && !ctx.dbService.getGroup(ctx.chatId).settings.economy) {
-            return await ctx.reply(styleText('ꕤ El sistema de economía está desactivado en este grupo.'));
+        if (ctx.isGroup) {
+            const groupData = await ctx.dbService.getGroup(ctx.chatId);
+            if (!groupData?.settings?.economy) {
+                return await ctx.reply(styleText('ꕤ El sistema de economía está desactivado en este grupo.'));
+            }
         }
         const mentions = extractMentions(ctx);
         const target = mentions.length > 0 ? mentions[0] : ctx.sender;
-        const userData = ctx.dbService.getUser(target);
-        const stats = userData.stats;
+        const userData = await ctx.dbService.getUser(target);
+        const stats = userData.stats || {};
         const total = userData.economy.coins + userData.economy.bank;
         const cooldowns = {
             work: getCooldown(userData.economy?.lastWork || 0, 1 * 60 * 1000),

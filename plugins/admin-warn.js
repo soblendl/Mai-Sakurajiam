@@ -3,23 +3,32 @@ import { isBotAdmin, isAdmin, extractMentions, styleText } from '../lib/utils.js
 export default {
     commands: ['warn', 'advertir', 'unwarn', 'delwarn'],
     tags: ['admin'],
-    help: ['warn @user', 'unwarn @user'],
+    help: ['warn @user [razón]', 'unwarn @user'],
 
     async execute(ctx) {
-        const { bot, chatId, isGroup, args, sender, command, reply, dbService } = ctx;
-        const conn = bot?.sock;
-
-        if (!isGroup) {
-            return await reply(styleText('ꕤ Este comando solo funciona en grupos.'));
+        // 1. Verificaciones básicas
+        if (!ctx.isGroup) {
+            return await ctx.reply(styleText('ꕤ Este comando solo funciona en grupos.'));
         }
 
-        if (!await isAdmin(conn, chatId, sender)) {
-            return await reply(styleText('ꕤ Necesitas ser administrador para usar este comando.'));
+        const admin = await isAdmin(ctx.bot, ctx.chatId, ctx.senderLid || ctx.sender);
+        if (!admin) {
+            return await ctx.reply(styleText('ꕤ Solo los administradores pueden usar este comando.'));
         }
 
-        const mentioned = extractMentions(ctx);
-        const quoted = ctx.msg.message?.extendedTextMessage?.contextInfo?.participant;
+        // 2. Obtener usuario objetivo
         let targetUser = null;
+        const msg = ctx.msg;
+
+        // Buscar en menciones o respuesta
+        const contextInfo = 
+            msg?.message?.extendedTextMessage?.contextInfo ||
+            msg?.message?.imageMessage?.contextInfo ||
+            msg?.message?.videoMessage?.contextInfo ||
+            msg?.message?.documentMessage?.contextInfo;
+            
+        const quoted = contextInfo?.participant;
+        const mentioned = extractMentions(ctx);
 
         if (mentioned.length > 0) {
             targetUser = mentioned[0];
@@ -28,52 +37,83 @@ export default {
         }
 
         if (!targetUser) {
-            return await reply(styleText('ꕤ Por favor etiqueta o responde al usuario.'));
+            return await ctx.reply(styleText('ꕤ Por favor etiqueta o responde al usuario que deseas advertir.'));
         }
 
-        if (await isAdmin(conn, chatId, targetUser)) {
-            return await reply(styleText('ꕤ No puedo advertir a un administrador.'));
+        // 3. Verificaciones de seguridad
+        if (await isAdmin(ctx.bot.sock, ctx.chatId, targetUser)) {
+            return await ctx.reply(styleText('ꕤ No puedo advertir a un administrador.'));
         }
 
-        const userData = dbService.getUser(targetUser);
+        if (targetUser.includes(ctx.bot.sock.user.id.split(':')[0])) {
+            return await ctx.reply(styleText('ꕤ No puedo advertirme a mí mismo.'));
+        }
+
+        // 4. Lógica de advertencias
+        const userData = ctx.dbService.getUser(targetUser);
         if (!userData.warns) userData.warns = 0;
 
-        const isUnwarn = ['unwarn', 'delwarn'].includes(command);
+        const isUnwarn = ['unwarn', 'delwarn'].includes(ctx.command);
 
         if (isUnwarn) {
             if (userData.warns > 0) {
                 userData.warns -= 1;
-                dbService.markDirty();
-                await reply(styleText(`✅ Advertencia eliminada para @${targetUser.split('@')[0]}\nAdvertencias actuales: ${userData.warns}/3`), { mentions: [targetUser] });
+                ctx.dbService.markDirty();
+                
+                return await ctx.reply(styleText(
+                    `ꕥ *Advertencia Eliminada*\n\n` +
+                    `> ⚬ Usuario » @${targetUser.split('@')[0]}\n` +
+                    `> ⚬ Advertencias » ${userData.warns}/3`
+                ), { mentions: [targetUser] });
             } else {
-                await reply(styleText('ꕤ El usuario no tiene advertencias.'));
+                return await ctx.reply(styleText('ꕤ El usuario no tiene advertencias para eliminar.'));
             }
-        } else {
-            userData.warns += 1;
-            dbService.markDirty();
+        } 
+        
+        // 5. Agregar advertencia
+        userData.warns += 1;
+        ctx.dbService.markDirty();
 
-            const reason = args.slice(1).join(' ') || 'Sin razón especificada';
-            const warns = userData.warns;
+        // Extraer razón (limpiando menciones si es necesario)
+        const reason = ctx.args.filter(arg => !arg.includes('@')).join(' ') || 'Sin razón especificada';
+        const warns = userData.warns;
 
-            if (warns >= 3) {
-                await reply(styleText(`⚠️ *Usuario Eliminado* ⚠️\n\n@${targetUser.split('@')[0]} ha acumulado 3 advertencias.\n\n> Motivo última advertencia: ${reason}`), { mentions: [targetUser] });
+        // 6. Verificar límite de advertencias (Kick)
+        if (warns >= 3) {
+            // Verificar si el bot es admin antes de intentar expulsar
+            if (await isBotAdmin(ctx.bot.sock, ctx.chatId)) {
+                
+                await ctx.reply(styleText(
+                    `ꕥ *LÍMITE ALCANZADO* \n\n` +
+                    `> ⚬ Usuario » @${targetUser.split('@')[0]}\n` +
+                    `> ▸ Razón Final » ${reason}\n\n` +
+                    `> El usuario ha acumulado 3 advertencias y será expulsado.`
+                ), { mentions: [targetUser] });
 
-                if (await isBotAdmin(conn, chatId)) {
-                    await conn.groupParticipantsUpdate(chatId, [targetUser], 'remove');
-                    userData.warns = 0; // Reset warns on kick
-                    dbService.markDirty();
-                } else {
-                    await reply(styleText('ꕤ No puedo eliminar al usuario porque no soy administrador.'));
+                try {
+                    await ctx.bot.groupParticipantsUpdate(ctx.chatId, [targetUser], 'remove');
+                    userData.warns = 0; // Resetear warn al expulsar
+                    ctx.dbService.markDirty();
+                } catch (error) {
+                    await ctx.reply(styleText('ꕤ Error al intentar expulsar al usuario.'));
                 }
+
             } else {
-                await reply(styleText(
-                    `⚠️ *Advertencia Agregada* ⚠️\n\n` +
-                    `👤 Usuario: @${targetUser.split('@')[0]}\n` +
-                    `📄 Razón: ${reason}\n` +
-                    `🔢 Advertencias: ${warns}/3\n\n` +
-                    `> _Acumular 3 advertencias resultará en expulsión._`
+                await ctx.reply(styleText(
+                    `ꕥ *LÍMITE ALCANZADO* \n\n` +
+                    `> ⚬ Usuario » @${targetUser.split('@')[0]}\n` +
+                    `> Ha acumulado 3 advertencias pero no soy admin para expulsarlo.`
                 ), { mentions: [targetUser] });
             }
+        } else {
+            // Solo advertencia
+            await ctx.reply(styleText(
+                `ꕥ *Advertencia* \n\n` +
+                `> ⚬ Usuario » @${targetUser.split('@')[0]}\n` +
+                `> ▸ Razón » ${reason}\n` +
+                `> ⚬ Advertencias » ${warns}/3\n\n` +
+                `> _Al llegar a 3 advertencias serás expulsado_`
+            ), { mentions: [targetUser] });
         }
     }
 };

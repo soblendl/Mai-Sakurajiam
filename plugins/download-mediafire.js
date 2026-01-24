@@ -3,10 +3,8 @@ import { styleText } from '../lib/utils.js';
 
 export default {
     commands: ['mediafire', 'mf', 'mfdl'],
-
     async execute(ctx) {
         const { streamManager, queueManager, cacheManager } = ctx;
-
         try {
             if (ctx.args.length === 0) {
                 return await ctx.reply(styleText(
@@ -15,7 +13,6 @@ export default {
                     `✿ #mediafire https://www.mediafire.com/file/xxxxx`
                 ));
             }
-
             const url = ctx.args[0];
             if (!url.includes('mediafire.com')) {
                 return await ctx.reply(styleText('《✧》 Por favor ingresa un link válido de MediaFire.'));
@@ -28,16 +25,13 @@ export default {
                 data = response.data;
                 cacheManager.set(apiUrl, data, 60 * 60)
             }
-
             if (!data || !data.data || !data.data[0]) {
                 return await ctx.reply(styleText('ꕤ No se pudo obtener información del enlace.'));
             }
-
             const file = data.data[0];
             if (!file.link) {
                 return await ctx.reply(styleText('ꕤ No se pudo obtener el enlace de descarga.'));
             }
-
             const caption = styleText(`╔═══《 MEDIAFIRE 》═══╗\n` +
                 `║\n` +
                 `║ ✦ *Nombre:* ${file.nama || 'Desconocido'}\n` +
@@ -52,7 +46,6 @@ export default {
                 fileName: file.nama || 'archivo',
                 mimetype: file.mime || 'application/octet-stream'
             };
-
             if (file.mime?.includes('image')) {
                 await ctx.bot.sendMessage(ctx.chatId, { image: { stream }, ...messageOptions }, { quoted: ctx.msg });
             } else if (file.mime?.includes('video')) {
@@ -62,7 +55,6 @@ export default {
             } else {
                 await ctx.bot.sendMessage(ctx.chatId, { document: { stream }, ...messageOptions }, { quoted: ctx.msg });
             }
-
         } catch (error) {
             console.error('Error en comando mediafire:', error);
             await ctx.reply(styleText(

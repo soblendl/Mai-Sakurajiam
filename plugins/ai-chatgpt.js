@@ -1,61 +1,31 @@
 import axios from 'axios';
 import { styleText } from '../lib/utils.js';
 
-const API_KEY = 'may-0fe5c62b';
-const API_URL = 'https://api.soymaycol.icu/ai-chatgpt';
-
 export default {
-    commands: ['chatgpt', 'gpt', 'chat'],
-    tags: ['ai'],
-    help: ['chatgpt <texto>'],
+    commands: ['chatgpt', 'gpt'],
 
     async execute(ctx) {
-        const { args, reply } = ctx;
+        const { bot, chatId, args, text, reply } = ctx;
 
-        const texto = args.join(' ');
-
-        if (!texto) {
-            return await reply(styleText(
-                `ꕤ *ChatGPT*\n\n` +
-                `> Escribe algo para hablar con ChatGPT\n\n` +
-                `*Uso:*\n` +
-                `> /chatgpt ¿Cómo estás?\n` +
-                `> /gpt Cuéntame un chiste`
-            ));
+        if (!text) {
+            await reply(styleText('ꕤ Por favor escribe algo para hablar con ChatGPT.\nEjemplo: #chatgpt Hola, ¿qué puedes hacer?'));
+            return;
         }
 
         try {
-            await ctx.reply(styleText(`ꕤ *Pensando...*`));
-
-            const response = await axios.get(API_URL, {
-                params: {
-                    q: texto,
-                    apikey: API_KEY
-                },
-                timeout: 30000
-            });
-
+            const apiUrl = `https://api.stellarwa.xyz/ai/chatgpt?text=${encodeURIComponent(text)}&key=stellar-20J4F8hk`;
+            const response = await axios.get(apiUrl);
             const data = response.data;
-
-            if (!data || !data.status || !data.result?.message) {
-                return await reply(styleText(`ꕤ *Error*\n\n> No se pudo obtener una respuesta.`));
+            
+            if (!data || !data.status || !data.result) {
+                await reply(styleText('ꕤ No pude obtener una respuesta de ChatGPT. Inténtalo más tarde.'));
+                return;
             }
 
-            const respuesta = data.result.message;
-
-            await reply(styleText(
-                `ꕤ *ChatGPT*\n\n` +
-                `${respuesta}`
-            ));
-
+            await reply(styleText(data.result));
         } catch (error) {
             console.error('[ChatGPT] Error:', error);
-
-            if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
-                return await reply(styleText(`ꕤ *Error*\n\n> La solicitud tardó demasiado. Intenta de nuevo.`));
-            }
-
-            await reply(styleText(`ꕤ *Error*\n\n> No se pudo conectar con ChatGPT.`));
+            await reply(styleText('ꕤ Error al obtener respuesta de ChatGPT.'));
         }
     }
 };

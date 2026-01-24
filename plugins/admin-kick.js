@@ -1,7 +1,7 @@
 ﻿import { isAdmin, isBotAdmin, extractMentions, styleText } from '../lib/utils.js';
 
 export default {
-    commands: ['kick'],
+    commands: ['kick', 'expulsar', 'ban', 'b'],
 
     async execute(ctx) {
         console.log(`[AdminKick] ========== INICIANDO COMANDO KICK ==========`);
@@ -11,84 +11,100 @@ export default {
         console.log(`[AdminKick] isGroup: ${ctx.isGroup}`);
 
         if (!ctx.isGroup) {
+            console.log(`[AdminKick] No es grupo, saliendo`);
             return await ctx.reply(styleText('ꕤ Este comando solo funciona en grupos.'));
         }
 
-        // Usar senderLid para verificación de admin (los participantes del grupo usan LID)
+        // 1. Verificar Admin
         const userIdForAdmin = ctx.senderLid || ctx.sender;
-        console.log(`[AdminKick] Verificando si el usuario es admin con ID: ${userIdForAdmin}`);
+        console.log(`[AdminKick] Verificando permisos de admin con: ${userIdForAdmin}`);
         const admin = await isAdmin(ctx.bot, ctx.chatId, userIdForAdmin);
         console.log(`[AdminKick] ¿Usuario es admin?: ${admin}`);
-
+        
         if (!admin) {
             return await ctx.reply(styleText('ꕤ Solo los administradores pueden usar este comando.'));
         }
 
-        // Verificar si el bot es admin
+        // 2. Verificar Bot Admin
         console.log(`[AdminKick] Verificando si el bot es admin...`);
         const botAdmin = await isBotAdmin(ctx.bot, ctx.chatId);
         console.log(`[AdminKick] ¿Bot es admin?: ${botAdmin}`);
-
+        
         if (!botAdmin) {
             return await ctx.reply(styleText('ꕤ Necesito ser administrador para expulsar usuarios.'));
         }
 
-        const mentions = extractMentions(ctx);
-        console.log(`[AdminKick] Menciones encontradas:`, mentions);
+        // 3. Obtener Usuario Objetivo
+        let targetUser = null;
+        const msg = ctx.msg;
 
-        if (mentions.length === 0) {
-            return await ctx.reply(styleText('ꕤ Debes mencionar al usuario a expulsar.\n\n> _Uso: #kick @usuario_'));
+        // Buscar en menciones o respuesta
+        const contextInfo = 
+            msg?.message?.extendedTextMessage?.contextInfo ||
+            msg?.message?.imageMessage?.contextInfo ||
+            msg?.message?.videoMessage?.contextInfo ||
+            msg?.message?.documentMessage?.contextInfo;
+            
+        const quoted = contextInfo?.participant;
+        const mentioned = extractMentions(ctx);
+
+        console.log(`[AdminKick] ContextInfo:`, contextInfo ? 'presente' : 'null');
+        console.log(`[AdminKick] Quoted participant:`, quoted);
+        console.log(`[AdminKick] Menciones:`, mentioned);
+
+        if (mentioned.length > 0) {
+            targetUser = mentioned[0];
+            console.log(`[AdminKick] Usuario objetivo (de menciones): ${targetUser}`);
+        } else if (quoted) {
+            targetUser = quoted;
+            console.log(`[AdminKick] Usuario objetivo (de quoted): ${targetUser}`);
         }
 
+        if (!targetUser) {
+            console.log(`[AdminKick] No se encontró usuario objetivo`);
+            return await ctx.reply(styleText('ꕤ Por favor etiqueta o responde al usuario a expulsar.\n\n> _Uso: #kick @usuario_'));
+        }
+
+        // 4. Ejecutar Expulsión
         try {
-            const groupMetadata = await ctx.bot.groupMetadata(ctx.chatId);
-            console.log(`[AdminKick] Participantes en grupo: ${groupMetadata.participants.length}`);
-
-            for (const mentionedUser of mentions) {
-                try {
-                    const phoneNumber = mentionedUser.split('@')[0].split(':')[0];
-                    console.log(`[AdminKick] Buscando usuario con número: ${phoneNumber}`);
-
-                    const participant = groupMetadata.participants.find(p => {
-                        const participantNumber = p.id.split('@')[0].split(':')[0];
-                        return participantNumber === phoneNumber;
-                    });
-
-                    if (!participant) {
-                        console.log(`[AdminKick] Usuario no encontrado en el grupo`);
-                        await ctx.reply(styleText(`ꕤ No se encontró al usuario @${phoneNumber} en el grupo.`), {
-                            mentions: [mentionedUser]
-                        });
-                        continue;
-                    }
-
-                    console.log(`[AdminKick] Usuario encontrado: ${participant.id}, admin: ${participant.admin}`);
-
-                    // No permitir kickear admins
-                    if (participant.admin === 'admin' || participant.admin === 'superadmin') {
-                        await ctx.reply(styleText(`ꕤ No puedo expulsar a @${phoneNumber} porque es administrador.`), {
-                            mentions: [participant.id]
-                        });
-                        continue;
-                    }
-
-                    await ctx.bot.groupParticipantsUpdate(ctx.chatId, [participant.id], 'remove');
-                    console.log(`[AdminKick] Usuario expulsado exitosamente`);
-
-                    await ctx.reply(styleText(`ꕥ @${phoneNumber} ha sido expulsado del grupo.`), {
-                        mentions: [participant.id]
-                    });
-                } catch (error) {
-                    console.error('[AdminKick] Error expulsando usuario:', error);
-                    await ctx.reply(styleText('ꕤ Error al expulsar al usuario: ' + error.message));
-                }
+            // Verificar si el usuario objetivo es admin
+            console.log(`[AdminKick] Verificando si objetivo ${targetUser} es admin...`);
+            const targetIsAdmin = await isAdmin(ctx.bot, ctx.chatId, targetUser);
+            console.log(`[AdminKick] ¿Objetivo es admin?: ${targetIsAdmin}`);
+            
+            if (targetIsAdmin) {
+                return await ctx.reply(styleText(`ꕤ No puedo expulsar a @${targetUser.split('@')[0]} porque es administrador.`), {
+                    mentions: [targetUser]
+                });
             }
-        } catch (error) {
-            console.error('[AdminKick] Error obteniendo metadata:', error);
-            await ctx.reply(styleText('ꕤ Error al obtener información del grupo: ' + error.message));
-        }
 
+            // Verificar si es el propio bot
+            const botId = ctx.bot.sock?.user?.id?.split(':')[0] || ctx.bot.user?.id?.split(':')[0];
+            console.log(`[AdminKick] Bot ID: ${botId}`);
+            console.log(`[AdminKick] Target incluye botId?: ${targetUser.includes(botId)}`);
+            
+            if (targetUser.includes(botId)) {
+                return await ctx.reply(styleText('ꕤ No puedo expulsarme a mí mismo.'));
+            }
+
+            // Proceder con la expulsión
+            console.log(`[AdminKick] Ejecutando expulsión de ${targetUser}...`);
+            await ctx.bot.groupParticipantsUpdate(ctx.chatId, [targetUser], 'remove');
+            console.log(`[AdminKick] Expulsión exitosa`);
+
+            await ctx.reply(styleText(
+                `ꕥ *Usuario Expulsado* \n\n` +
+                `> ⚬ Usuario » @${targetUser.split('@')[0]}\n` +
+                `> ⚬ Acción » Expulsión inmediata`
+            ), {
+                mentions: [targetUser]
+            });
+
+        } catch (error) {
+            console.error('[AdminKick] Error:', error);
+            await ctx.reply(styleText('ꕤ Error al expulsar al usuario: ' + error.message));
+        }
+        
         console.log(`[AdminKick] ========== FIN COMANDO KICK ==========`);
     }
 };
-

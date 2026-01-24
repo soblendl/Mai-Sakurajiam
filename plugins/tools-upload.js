@@ -29,14 +29,14 @@ export default {
 
         if (!hasMedia) {
             return await ctx.reply(styleText(
-                `📤 *UPLOAD - Subir a Catbox*\n\n` +
-                `Responde a un archivo con #upload\n` +
-                `O envía un archivo con el comando.\n\n` +
-                `Soporta: Imágenes, Videos, Documentos, Audios, Stickers`
+                `ꕤ *UPLOAD - Subir Archivos*\n\n` +
+                `> Responde a un archivo con #upload\n` +
+                `> O envía un archivo con el comando.\n\n` +
+                `> Soporta: Imágenes`
             ));
         }
 
-        await ctx.reply(styleText('📤 Subiendo archivo a Catbox.moe...'));
+        await ctx.reply(styleText('ꕤ Subiendo archivo...'));
 
         try {
             const buffer = await downloadMediaMessage(
@@ -46,7 +46,7 @@ export default {
             );
 
             if (!buffer) {
-                return await ctx.reply(styleText('❌ Error al descargar el archivo.'));
+                return await ctx.reply(styleText('ꕤ Error al descargar el archivo.'));
             }
 
             let filename = 'file';
@@ -75,13 +75,12 @@ export default {
             }
 
             const formData = new FormData();
-            formData.append('reqtype', 'fileupload');
-            formData.append('fileToUpload', buffer, {
+            formData.append('file', buffer, {
                 filename: filename,
                 contentType: mimetype
             });
 
-            const response = await fetch('https://catbox.moe/user/api.php', {
+            const response = await fetch('https://soblend-api.drexelxx.workers.dev/api/upload', {
                 method: 'POST',
                 body: formData
             });
@@ -90,23 +89,25 @@ export default {
                 throw new Error(`HTTP ${response.status}`);
             }
 
-            const result = await response.text();
+            const result = await response.json();
 
-            if (!result.startsWith('https://')) {
-                throw new Error(result || 'Error desconocido');
+            // Extraer el link - puede estar en diferentes campos
+            const fileUrl = result.url || result.link || result.file || result.data?.url || result.data?.link;
+
+            if (!fileUrl) {
+                throw new Error('No se recibió un link válido del servidor');
             }
 
             await ctx.reply(styleText(
-                `✅ *Archivo subido exitosamente*\n\n` +
-                `📁 Archivo: ${filename}\n` +
-                `🔗 Link: ${result}\n\n` +
-                `> El archivo estará disponible permanentemente`
+                `ꕥ *Archivo subido exitosamente*\n\n` +
+                `> Archivo » ${filename}\n` +
+                `> Link » ${fileUrl}\n\n` +
+                `> El archivo estará disponible en línea`
             ));
 
         } catch (error) {
-            console.error('Error uploading to Catbox:', error);
-            await ctx.reply(styleText(`❌ Error al subir: ${error.message}`));
+            console.error('Error uploading file:', error);
+            await ctx.reply(styleText(`ꕤ Error al subir: ${error.message}`));
         }
     }
 };
-

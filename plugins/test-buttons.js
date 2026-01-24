@@ -1,5 +1,3 @@
-import * as wapi from '@imjxsx/wapi'
-
 import { styleText } from '../lib/utils.js';
 
 export default {
@@ -15,72 +13,43 @@ export default {
         }
 
         try {
-            await conn.sendMessage(chatId, {
+            // Opción 1: Botones simples (más compatibles)
+            const buttons = [
+                {
+                    buttonId: 'btn1',
+                    buttonText: { displayText: '📋 Copiar Código' },
+                    type: 1
+                },
+                {
+                    buttonId: 'btn2',
+                    buttonText: { displayText: '🔗 Ver Canal' },
+                    type: 1
+                },
+                {
+                    buttonId: 'btn3',
+                    buttonText: { displayText: '📞 Contactar' },
+                    type: 1
+                }
+            ];
+
+            const buttonMessage = {
                 text: styleText("ꕥ *Test de Botones Interactivos*\n\n> Estos son todos los tipos de botones disponibles."),
-                footer: `Kaoruko-Waguri Bot`,
-                interactiveButtons: [
-                    {
-                        name: 'cta_copy',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '📋 Copiar Código',
-                            copy_code: 'Kaoruko-Waguri-Bot'
-                        })
-                    },
-                    {
-                        name: 'cta_url',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '🔗 Canal de WhatsApp',
-                            url: 'https://whatsapp.com/channel/0029VbB9SA10rGiQvM2DMi2p',
-                            merchant_url: 'https://whatsapp.com/channel/0029VbB9SA10rGiQvM2DMi2p'
-                        })
-                    },
-                    {
-                        name: 'cta_call',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '📞 Llamar',
-                            phone_number: '573115434166'
-                        })
-                    },
-                    {
-                        name: 'cta_reminder',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '⏰ Recordatorio'
-                        })
-                    },
-                    {
-                        name: 'address_message',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '📍 Dirección'
-                        })
-                    },
-                    {
-                        name: 'send_location',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '🗺️ Enviar Ubicación'
-                        })
-                    },
-                    {
-                        name: 'open_webview',
-                        buttonParamsJson: JSON.stringify({
-                            title: '🌐 Abrir Web',
-                            link: {
-                                in_app_webview: true,
-                                url: 'https://whatsapp.com/channel/0029VbB9SA10rGiQvM2DMi2p'
-                            }
-                        })
-                    },
-                    {
-                        name: 'cta_cancel_reminder',
-                        buttonParamsJson: JSON.stringify({
-                            display_text: '❌ Cancelar Recordatorio'
-                        })
-                    }
-                ],
-            }, { quoted: msg });
+                footer: 'Kaoruko-Waguri Bot',
+                buttons: buttons,
+                headerType: 1
+            };
+
+            await conn.sendMessage(chatId, buttonMessage, { quoted: msg });
 
         } catch (error) {
             console.error('[TestButtons] Error:', error);
-            await ctx.reply(styleText('ꕤ Error al enviar los botones interactivos.'));
+
+            // Si los botones fallan, enviar mensaje de texto normal
+            try {
+                await ctx.reply(styleText('ꕤ Botones interactivos:\n\n1. 📋 Copiar Código\n2. 🔗 Ver Canal\n3. 📞 Contactar\n\n_Los botones no están disponibles en este momento._'));
+            } catch (fallbackError) {
+                console.error('[TestButtons] Fallback también falló:', fallbackError);
+            }
         }
     }
 };
